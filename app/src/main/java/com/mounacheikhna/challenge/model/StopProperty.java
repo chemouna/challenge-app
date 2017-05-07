@@ -2,7 +2,6 @@ package com.mounacheikhna.challenge.model;
 
 import android.os.Parcelable;
 import auto.parcel.AutoParcel;
-import com.google.auto.value.AutoValue;
 import com.google.gson.TypeAdapterFactory;
 
 @AutoParcel
