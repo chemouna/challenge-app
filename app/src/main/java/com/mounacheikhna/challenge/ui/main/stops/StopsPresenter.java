@@ -4,34 +4,40 @@ import android.support.annotation.NonNull;
 import com.mounacheikhna.challenge.api.TflApi;
 import com.mounacheikhna.challenge.data.GoogleApiClientProvider;
 import com.mounacheikhna.challenge.data.LocationRequester;
-import com.mounacheikhna.challenge.data.PermissionManager;
 import com.mounacheikhna.challenge.model.LatLng;
+import com.mounacheikhna.challenge.ui.main.PermissionRequester;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import javax.inject.Inject;
 
 public class StopsPresenter {
 
-    static final double DEFAULT_LATITUDE = 51.5033;
-    static final double DEFAULT_LONGITUDE = 0.1195;
+    private static final double DEFAULT_LATITUDE = 51.5033;
+    private static final double DEFAULT_LONGITUDE = 0.1195;
 
     private final GoogleApiClientProvider googleApiClientWrapper;
     private final LocationRequester locationRequester;
     private final TflApi tflApi;
+    private final PermissionRequester permissionRequester;
+
+    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Inject
     public StopsPresenter(GoogleApiClientProvider googleApiClientProvider,
-        LocationRequester locationRequester, PermissionManager permissionManager, TflApi tflApi) {
+        LocationRequester locationRequester, TflApi tflApi,
+        PermissionRequester permissionRequester) {
         this.googleApiClientWrapper = googleApiClientProvider;
         this.locationRequester = locationRequester;
         this.tflApi = tflApi;
+        this.permissionRequester = permissionRequester;
     }
 
-    public void bind(StopsScreen screen) {
+    void bind(StopsScreen screen) {
         if (screen.hasLocationPermission()) {
             getLocationAndUpdateStops(screen);
         } else {
-            screen.requestLocationPermission();
+            permissionRequester.requestLocation();
         }
 
         screen.stopPointSelected()
@@ -49,7 +55,7 @@ public class StopsPresenter {
             }
             screen.showLoadingView(true);
 
-            tflApi.stopPoint(latLng.latitude(), latLng.longitude())
+            compositeDisposable.add(tflApi.stopPoint(latLng.latitude(), latLng.longitude())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(stopPoints -> {
@@ -59,8 +65,9 @@ public class StopsPresenter {
                     } else {
                         screen.setStopPoints(stopPoints);
                     }
-                }, Throwable::printStackTrace);
-        }); googleApiClientWrapper.connect();
+                }, Throwable::printStackTrace));
+        });
+        googleApiClientWrapper.connect();
     }
 
     private boolean isInLondon(@NonNull final LatLng latLng) {
@@ -72,5 +79,6 @@ public class StopsPresenter {
 
     void unbind() {
         googleApiClientWrapper.disconnect();
+        compositeDisposable.clear();
     }
 }

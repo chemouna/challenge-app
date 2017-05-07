@@ -6,8 +6,6 @@ public interface StopsScreen {
 
     boolean hasLocationPermission();
 
-    void requestLocationPermission();
-
     Observable<Object> stopPointSelected();
 
     void displayStopDetails(Object o);

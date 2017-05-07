@@ -9,22 +9,9 @@ import android.view.View;
 import android.widget.LinearLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.mounacheikhna.challenge.ChallengeApp;
 import com.mounacheikhna.challenge.R;
-import com.mounacheikhna.challenge.api.TflApi;
-import com.mounacheikhna.challenge.data.GoogleApiClientProvider;
-import com.mounacheikhna.challenge.data.LocationRequester;
-import com.mounacheikhna.challenge.data.PermissionManager;
-import com.mounacheikhna.challenge.ui.main.MainActivity;
-import com.mounacheikhna.challenge.ui.main.MainActivityComponent;
-import dagger.BindsInstance;
-import dagger.Component;
-import dagger.Subcomponent;
-import dagger.android.AndroidInjection;
-import dagger.android.AndroidInjector;
-import dagger.android.support.AndroidSupportInjection;
+import com.mounacheikhna.challenge.data.PermissionHelper;
 import io.reactivex.Observable;
-import javax.inject.Inject;
 
 public class StopsView extends LinearLayout implements StopsScreen {
 
@@ -49,16 +36,12 @@ public class StopsView extends LinearLayout implements StopsScreen {
 
     public void bind(StopsPresenter stopsPresenter) {
         this.presenter = presenter;
+        this.presenter.bind(this);
     }
 
     @Override
     public boolean hasLocationPermission() {
-        return PermissionManager.hasLocation(getContext());
-    }
-
-    @Override
-    public void requestLocationPermission() {
-        //PermissionManager.requestLocation(activity);
+        return PermissionHelper.hasLocation(getContext());
     }
 
     @Override
@@ -84,5 +67,11 @@ public class StopsView extends LinearLayout implements StopsScreen {
     @Override
     public void setStopPoints(Object stopPoints) {
 
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        presenter.unbind();
+        super.onDetachedFromWindow();
     }
 }

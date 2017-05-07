@@ -3,7 +3,6 @@ package com.mounacheikhna.challenge.ui.main;
 import com.mounacheikhna.challenge.api.TflApi;
 import com.mounacheikhna.challenge.data.GoogleApiClientProvider;
 import com.mounacheikhna.challenge.data.LocationRequester;
-import com.mounacheikhna.challenge.data.PermissionManager;
 import com.mounacheikhna.challenge.ui.main.stops.StopsPresenter;
 import org.junit.Before;
 import org.junit.Rule;
@@ -19,13 +18,11 @@ public class StopsPresenterTest {
 
     @Mock private GoogleApiClientProvider googleApiClientProvider;
     @Mock private LocationRequester locationRequester;
-    @Mock private PermissionManager permissionManager;
     @Mock private TflApi tflApi;
+    @Mock private PermissionRequester requester;
 
     @Before
     public void setUp() throws Exception {
-        stopsPresenter =
-            new StopsPresenter(googleApiClientProvider, locationRequester, permissionManager,
-                tflApi);
+        stopsPresenter = new StopsPresenter(googleApiClientProvider, locationRequester, tflApi);
     }
 }
