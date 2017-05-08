@@ -1,11 +1,12 @@
 package com.mounacheikhna.challenge.model;
 
+import android.os.Parcelable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import java.util.List;
 
-@AutoValue public abstract class StopPoint {
+@AutoValue public abstract class StopPoint implements Parcelable {
 
     public static StopPoint create(String id, String naptanId, double lat, double lon,
         String commonName, double distance, List<StopProperty> additionalProperties) {
@@ -30,5 +31,4 @@ import java.util.List;
     public static TypeAdapter<StopPoint> typeAdapter(Gson gson) {
         return new AutoValue_StopPoint.GsonTypeAdapter(gson);
     }
-
 }

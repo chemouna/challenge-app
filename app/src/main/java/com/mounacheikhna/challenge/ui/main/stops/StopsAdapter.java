@@ -46,8 +46,8 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopPointVie
         notifyDataSetChanged();
     }
 
-    public void getItem(int position) {
-        this.stopPoints.get(position);
+    public CompleteStopPoint getItem(int position) {
+        return this.stopPoints.get(position);
     }
 
     static class StopPointViewHolder extends RecyclerView.ViewHolder {
@@ -67,9 +67,9 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopPointVie
 
         void bind(final CompleteStopPoint item) {
             this.completeStopPoint = item;
-            stopNameTv.setText(item.getStopPoint().commonName());
+            stopNameTv.setText(item.stopPoint().commonName());
             StringBuilder formattedDepartures = new StringBuilder();
-            for (Departure departure : item.getDepartures()) {
+            for (Departure departure : item.departures()) {
                 formattedDepartures.append(departure.timeToStation()).append(" ");
             }
             departuresTv.setText(formattedDepartures.toString());

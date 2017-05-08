@@ -1,10 +1,11 @@
 package com.mounacheikhna.challenge.model;
 
+import android.os.Parcelable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 
-@AutoValue public abstract class StopProperty {
+@AutoValue public abstract class StopProperty implements Parcelable {
 
     public static StopProperty create(String category, String key, String sourceSystemKey,
         String value) {

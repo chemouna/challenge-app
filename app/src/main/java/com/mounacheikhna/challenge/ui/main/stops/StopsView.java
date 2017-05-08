@@ -69,7 +69,7 @@ public class StopsView extends LinearLayout implements StopsScreen {
             @Override
             protected boolean performItemClick(RecyclerView parent, View view, int position,
                 long id) {
-                StopDetailsActivity.start(stopsAdapter.getItem(position));
+                StopDetailsActivity.start(getContext(), stopsAdapter.getItem(position));
                 return true;
             }
 

@@ -10,8 +10,8 @@ public abstract class CompleteStopPoint implements Parcelable {
     public abstract StopPoint stopPoint();
     public abstract List<Departure> departures();
 
-    public CompleteStopPoint create(StopPoint stopPoint, List<Departure> departures) {
-        return new AutoValue_CompleteStopPont(stopPoint, departures);
+    public static CompleteStopPoint create(StopPoint stopPoint, List<Departure> departures) {
+        return new AutoValue_CompleteStopPoint(stopPoint, departures);
     }
 
 }
