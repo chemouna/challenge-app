@@ -14,7 +14,7 @@ import javax.inject.Inject;
 public class StopsPresenter {
 
     private static final double DEFAULT_LATITUDE = 51.5033;
-    private static final double DEFAULT_LONGITUDE = 0.1195;
+    private static final double DEFAULT_LONGITUDE = -0.1195;
 
     private final GoogleApiClientProvider googleApiClientWrapper;
     private final LocationRequester locationRequester;
@@ -66,7 +66,7 @@ public class StopsPresenter {
                     if (response.stopPoints().size() == 0) {
                         screen.showNoStopsView(true);
                     } else {
-                        screen.setStopPoints(response.stopPoints());
+                        screen.displayStopPoints(response.stopPoints());
                     }
                 }, Throwable::printStackTrace));
         });

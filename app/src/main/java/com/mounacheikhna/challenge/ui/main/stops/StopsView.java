@@ -12,7 +12,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.mounacheikhna.challenge.R;
 import com.mounacheikhna.challenge.data.PermissionManager;
+import com.mounacheikhna.challenge.model.StopPoint;
 import io.reactivex.Observable;
+import java.util.List;
 
 public class StopsView extends LinearLayout implements StopsScreen {
 
@@ -75,9 +77,8 @@ public class StopsView extends LinearLayout implements StopsScreen {
 
     }
 
-    @Override
-    public void setStopPoints(Object stopPoints) {
-
+    public void displayStopPoints(List<StopPoint> stopPoints) {
+        stopsAdapter.setItems(stopPoints);
     }
 
     @Override

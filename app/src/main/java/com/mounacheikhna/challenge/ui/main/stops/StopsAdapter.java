@@ -33,7 +33,7 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopPointVie
         return stopPoints.size();
     }
 
-    public void setData(final List<StopPoint> stopPoints) {
+    public void setItems(final List<StopPoint> stopPoints) {
         this.stopPoints = stopPoints;
         notifyDataSetChanged();
     }
