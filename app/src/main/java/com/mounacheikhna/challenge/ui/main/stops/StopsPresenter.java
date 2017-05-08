@@ -4,11 +4,11 @@ import android.support.annotation.NonNull;
 import com.mounacheikhna.challenge.api.TflApi;
 import com.mounacheikhna.challenge.data.GoogleApiClientProvider;
 import com.mounacheikhna.challenge.data.LocationRequester;
+import com.mounacheikhna.challenge.data.PermissionManager;
 import com.mounacheikhna.challenge.model.LatLng;
 import com.mounacheikhna.challenge.ui.main.PermissionRequester;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.schedulers.Schedulers;
 import javax.inject.Inject;
 
 public class StopsPresenter {
@@ -20,30 +20,34 @@ public class StopsPresenter {
     private final LocationRequester locationRequester;
     private final TflApi tflApi;
     private final PermissionRequester permissionRequester;
+    private final PermissionManager permissionManager;
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Inject
     public StopsPresenter(GoogleApiClientProvider googleApiClientProvider,
-        LocationRequester locationRequester, TflApi tflApi,
-        PermissionRequester permissionRequester) {
+        LocationRequester locationRequester, TflApi tflApi, PermissionRequester permissionRequester,
+        PermissionManager permissionManager) {
         this.googleApiClientWrapper = googleApiClientProvider;
         this.locationRequester = locationRequester;
         this.tflApi = tflApi;
         this.permissionRequester = permissionRequester;
+        this.permissionManager = permissionManager;
     }
 
     void bind(StopsScreen screen) {
         if (screen.hasLocationPermission()) {
             getLocationAndUpdateStops(screen);
         } else {
+            permissionManager.anyGanted(PermissionManager.REQUEST_LOCATION_PERMISSIONS)
+                .subscribe(granted -> getLocationAndUpdateStops(screen));
+            //permissionManager.denials().subscribe(s -> permissionRequester.requestLocation());
             permissionRequester.requestLocation();
         }
-
-        screen.stopPointSelected()
+        /*screen.stopPointSelected()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
-            .subscribe(screen::displayStopDetails);
+            .subscribe(screen::displayStopDetails);*/
     }
 
     private void getLocationAndUpdateStops(StopsScreen screen) {
@@ -57,13 +61,12 @@ public class StopsPresenter {
 
             compositeDisposable.add(tflApi.stopPoint(latLng.latitude(), latLng.longitude())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(stopPoints -> {
+                .subscribe(response -> {
                     screen.showLoadingView(false);
-                    if (stopPoints.size() == 0) {
+                    if (response.stopPoints().size() == 0) {
                         screen.showNoStopsView(true);
                     } else {
-                        screen.setStopPoints(stopPoints);
+                        screen.setStopPoints(response.stopPoints());
                     }
                 }, Throwable::printStackTrace));
         });

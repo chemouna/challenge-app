@@ -1,6 +1,8 @@
 package com.mounacheikhna.challenge.api;
 
 import com.facebook.stetho.okhttp3.StethoInterceptor;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.mounacheikhna.challenge.BuildConfig;
 import dagger.Module;
 import dagger.Provides;
@@ -15,10 +17,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
     @Provides
     @Singleton
-    static Retrofit provideRetrofit(OkHttpClient client) {
+    static Retrofit provideRetrofit(OkHttpClient client, Gson gson) {
         return new Retrofit.Builder().baseUrl(BuildConfig.API_URL)
             .client(client)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
             .build();
     }
@@ -27,6 +29,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
     @Singleton
     static OkHttpClient provideOkhttpClient() {
         return new OkHttpClient().newBuilder()
+            //TODO: add only on debug mode
             .addNetworkInterceptor(new StethoInterceptor())
             .build();
     }
@@ -37,4 +40,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
         return retrofit.create(TflApi.class);
     }
 
+    @Provides
+    @Singleton
+    static Gson provideGson() {
+        return new GsonBuilder().registerTypeAdapterFactory(ModelAdapterFactory.create()).create();
+    }
 }

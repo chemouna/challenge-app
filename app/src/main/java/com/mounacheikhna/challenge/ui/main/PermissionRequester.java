@@ -1,7 +1,7 @@
 package com.mounacheikhna.challenge.ui.main;
 
 import android.app.Activity;
-import com.mounacheikhna.challenge.data.PermissionHelper;
+import com.mounacheikhna.challenge.data.PermissionManager;
 
 public class PermissionRequester {
 
@@ -12,6 +12,6 @@ public class PermissionRequester {
     }
 
     public void requestLocation() {
-        PermissionHelper.requestLocation(activity);
+        PermissionManager.requestLocation(activity);
     }
 }

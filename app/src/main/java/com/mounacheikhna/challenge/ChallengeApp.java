@@ -3,6 +3,7 @@ package com.mounacheikhna.challenge;
 import android.app.Activity;
 import android.app.Application;
 import android.app.Fragment;
+import com.facebook.stetho.Stetho;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasDispatchingActivityInjector;
 import javax.inject.Inject;
@@ -29,6 +30,9 @@ public class ChallengeApp extends Application implements HasDispatchingActivityI
         instance = this;
         component = DaggerAppComponent.builder().app(this).build();
         component.inject(this);
+
+        //TODO: move this to a debug build Application object
+        Stetho.initializeWithDefaults(this);
     }
 
     @Override

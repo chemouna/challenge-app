@@ -6,12 +6,15 @@ buildscript {
     }
     dependencies {
         classpath "com.android.tools.build:gradle:2.4.0-alpha7"
+        classpath "com.neenbedankt.gradle.plugins:android-apt:1.4"
     }
 }
 
 allprojects {
     repositories {
+        mavenCentral()
         jcenter()
+        maven {url "https://clojars.org/repo/"}
     }
 }
 
