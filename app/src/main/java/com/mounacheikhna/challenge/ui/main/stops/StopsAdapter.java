@@ -8,13 +8,14 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.mounacheikhna.challenge.R;
-import com.mounacheikhna.challenge.model.StopPoint;
+import com.mounacheikhna.challenge.model.CompleteStopPoint;
+import com.mounacheikhna.challenge.model.Departure;
 import java.util.ArrayList;
 import java.util.List;
 
 public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopPointViewHolder> {
 
-    private List<StopPoint> stopPoints = new ArrayList<>();
+    private List<CompleteStopPoint> stopPoints = new ArrayList<>();
 
     @Override
     public StopPointViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
@@ -33,15 +34,27 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopPointVie
         return stopPoints.size();
     }
 
-    public void setItems(final List<StopPoint> stopPoints) {
+    void setItems(final List<CompleteStopPoint> stopPoints) {
+
+
         this.stopPoints = stopPoints;
         notifyDataSetChanged();
     }
 
-    static class StopPointViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.stop_name_tv) TextView stopName;
+    public void addItem(CompleteStopPoint result) {
+        this.stopPoints.add(result);
+        notifyDataSetChanged();
+    }
 
-        private StopPoint stopPoint;
+    public void getItem(int position) {
+        this.stopPoints.get(position);
+    }
+
+    static class StopPointViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.stop_name_tv) TextView stopNameTv;
+        @BindView(R.id.departures_tv) TextView departuresTv;
+
+        private CompleteStopPoint completeStopPoint;
 
         StopPointViewHolder(final View itemView) {
             super(itemView);
@@ -52,13 +65,18 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopPointVie
             return R.layout.stop_point_item_layout;
         }
 
-        void bind(final StopPoint data) {
-            this.stopPoint = data;
-            stopName.setText(data.commonName());
+        void bind(final CompleteStopPoint item) {
+            this.completeStopPoint = item;
+            stopNameTv.setText(item.getStopPoint().commonName());
+            StringBuilder formattedDepartures = new StringBuilder();
+            for (Departure departure : item.getDepartures()) {
+                formattedDepartures.append(departure.timeToStation()).append(" ");
+            }
+            departuresTv.setText(formattedDepartures.toString());
         }
 
-        StopPoint getStopPoint() {
-            return stopPoint;
+        CompleteStopPoint getCompleteStopPoint() {
+            return completeStopPoint;
         }
     }
 }

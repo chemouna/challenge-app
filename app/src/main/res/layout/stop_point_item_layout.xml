@@ -12,9 +12,18 @@
 
   <TextView
       android:id="@+id/stop_name_tv"
-      android:layout_width="wrap_content"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Title"
       tools:text="Stop name"
       />
+
+
+  <TextView
+      android:id="@+id/departures_tv"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      tools:text="In 2 hours"
+      />
+
 </LinearLayout>

@@ -5,10 +5,15 @@ import com.mounacheikhna.challenge.api.TflApi;
 import com.mounacheikhna.challenge.data.GoogleApiClientProvider;
 import com.mounacheikhna.challenge.data.LocationRequester;
 import com.mounacheikhna.challenge.data.PermissionManager;
+import com.mounacheikhna.challenge.model.CompleteStopPoint;
 import com.mounacheikhna.challenge.model.LatLng;
+import com.mounacheikhna.challenge.model.StopPointResponse;
 import com.mounacheikhna.challenge.ui.main.PermissionRequester;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
+import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
 public class StopsPresenter {
@@ -59,15 +64,18 @@ public class StopsPresenter {
             }
             screen.showLoadingView(true);
 
-            compositeDisposable.add(tflApi.stopPoint(latLng.latitude(), latLng.longitude())
+            final Observable<StopPointResponse> stopPointObservable =
+                tflApi.stopPoint(latLng.latitude(), latLng.longitude()).share();
+
+            compositeDisposable.add(Observable.interval(0, 30, TimeUnit.SECONDS, Schedulers.io())
+                .flatMap(l -> stopPointObservable)
+                .flatMap(response -> Observable.fromIterable(response.stopPoints())
+                    .flatMap(stopPoint -> tflApi.departures(stopPoint.id())
+                        .map(departures -> CompleteStopPoint.create(stopPoint, departures))))
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response -> {
+                .subscribe(result -> {
                     screen.showLoadingView(false);
-                    if (response.stopPoints().size() == 0) {
-                        screen.showNoStopsView(true);
-                    } else {
-                        screen.displayStopPoints(response.stopPoints());
-                    }
+                    screen.displayStopPoint(result);
                 }, Throwable::printStackTrace));
         });
         googleApiClientWrapper.connect();

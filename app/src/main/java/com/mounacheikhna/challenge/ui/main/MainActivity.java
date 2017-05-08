@@ -35,15 +35,6 @@ public class MainActivity extends AppCompatActivity {
         @NonNull final int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         this.permissionManager.requestPermissionsResult(permissions, grantResults);
-
-        /*switch (requestCode) {
-            case REQUEST_CODE_REQUEST_LOCATION_PERMISSION:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    presenter.locationPermissionGranted();
-                } else {
-                    presenter.locationPermissionDenied();
-                }
-        }*/
     }
 
 }
