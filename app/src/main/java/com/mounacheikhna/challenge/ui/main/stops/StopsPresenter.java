@@ -5,10 +5,15 @@ import com.mounacheikhna.challenge.api.TflApi;
 import com.mounacheikhna.challenge.data.GoogleApiClientProvider;
 import com.mounacheikhna.challenge.data.LocationRequester;
 import com.mounacheikhna.challenge.data.PermissionManager;
+import com.mounacheikhna.challenge.model.CompleteStopPoint;
 import com.mounacheikhna.challenge.model.LatLng;
+import com.mounacheikhna.challenge.model.StopPointResponse;
 import com.mounacheikhna.challenge.ui.main.PermissionRequester;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
+import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
 public class StopsPresenter {
@@ -16,7 +21,7 @@ public class StopsPresenter {
     private static final double DEFAULT_LATITUDE = 51.5033;
     private static final double DEFAULT_LONGITUDE = -0.1195;
 
-    private final GoogleApiClientProvider googleApiClientWrapper;
+    private final GoogleApiClientProvider googleApiClientProvider;
     private final LocationRequester locationRequester;
     private final TflApi tflApi;
     private final PermissionRequester permissionRequester;
@@ -28,7 +33,7 @@ public class StopsPresenter {
     public StopsPresenter(GoogleApiClientProvider googleApiClientProvider,
         LocationRequester locationRequester, TflApi tflApi, PermissionRequester permissionRequester,
         PermissionManager permissionManager) {
-        this.googleApiClientWrapper = googleApiClientProvider;
+        this.googleApiClientProvider = googleApiClientProvider;
         this.locationRequester = locationRequester;
         this.tflApi = tflApi;
         this.permissionRequester = permissionRequester;
@@ -47,8 +52,8 @@ public class StopsPresenter {
     }
 
     private void getLocationAndUpdateStops(StopsScreen screen) {
-        googleApiClientWrapper.registerConnectionCallbacks(() -> {
-            LatLng latLng = locationRequester.lastLocation(googleApiClientWrapper);
+        googleApiClientProvider.registerConnectionCallbacks(() -> {
+            LatLng latLng = locationRequester.lastLocation(googleApiClientProvider);
 
             if (latLng == null || !isInLondon(latLng)) {
                 latLng = LatLng.create(DEFAULT_LATITUDE, DEFAULT_LONGITUDE);
@@ -82,7 +87,7 @@ public class StopsPresenter {
                     }
                 }, Throwable::printStackTrace));*/
         });
-        googleApiClientWrapper.connect();
+        googleApiClientProvider.connect();
     }
 
     private void fetchStopPoints(StopsScreen screen, LatLng latLng) {
@@ -103,7 +108,7 @@ public class StopsPresenter {
     }
 
     void unbind() {
-        googleApiClientWrapper.disconnect();
+        googleApiClientProvider.disconnect();
         compositeDisposable.clear();
     }
 }

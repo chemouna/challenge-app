@@ -10,7 +10,7 @@ import dagger.android.AndroidInjectionModule;
 import javax.inject.Singleton;
 
 @Singleton @Component(modules = {
-    AndroidInjectionModule.class, AppModule.class, ApiModule.class, MainActivityModule.class,
+    AndroidInjectionModule.class, AppModule.class, ReleaseApiModule.class, MainActivityModule.class,
     StopDetailsActivityModule.class
 })
 public interface AppComponent extends InjectGraph {

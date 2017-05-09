@@ -7,6 +7,7 @@ import com.mounacheikhna.challenge.BuildConfig;
 import dagger.Module;
 import dagger.Provides;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import javax.inject.Singleton;
 import okhttp3.Interceptor;
@@ -19,7 +20,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
     @DebugInterceptors
     @Singleton
     @Provides
-    List<Interceptor> provideDebugInterceptors() {
+    public static List<Interceptor> provideDebugInterceptors() {
         final LoggingInterceptor loggingInterceptor =
             new LoggingInterceptor.Builder().loggable(BuildConfig.DEBUG)
                 .setLevel(Level.BASIC)
@@ -34,13 +35,13 @@ import okhttp3.logging.HttpLoggingInterceptor;
     @DebugNetworkInterceptors
     @Singleton
     @Provides
-    List<Interceptor> provideDebugNetworkInterceptors() {
-        return Arrays.asList(new StethoInterceptor());
+    public static List<Interceptor> provideDebugNetworkInterceptors() {
+        return Collections.singletonList(new StethoInterceptor());
     }
 
     @Provides
     @Singleton
-    public OkHttpClient provideApiClient(OkHttpClient.Builder builder,
+    public static OkHttpClient provideApiClient(OkHttpClient.Builder builder,
         @DebugInterceptors List<Interceptor> debugInterceptors,
         @DebugNetworkInterceptors List<Interceptor> debugNetworkInterceptors) {
 

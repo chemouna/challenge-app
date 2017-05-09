@@ -14,6 +14,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.mounacheikhna.challenge.R;
 import com.mounacheikhna.challenge.model.CompleteStopPoint;
+import com.mounacheikhna.challenge.model.LatLng;
 import com.mounacheikhna.challenge.model.Line;
 import com.mounacheikhna.challenge.model.StopPoint;
 import com.mounacheikhna.challenge.ui.main.stops.StopsAdapter;
@@ -28,7 +29,7 @@ public class StopDetailsView extends LinearLayout implements StopDetailsScreen {
     @BindView(R.id.progress) ProgressBar progressBar;
 
     @Nullable private CompleteStopPoint completeStopPoint;
-    private StopDetailsAdapter stopDetailsAdapter;
+    private StopsAdapter stopDetailsAdapter;
 
     public StopDetailsView(Context context) {
         this(context, null);
@@ -48,7 +49,7 @@ public class StopDetailsView extends LinearLayout implements StopDetailsScreen {
 
     private void setupDetailsRv() {
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
-        stopDetailsAdapter = new StopDetailsAdapter();
+        stopDetailsAdapter = new StopsAdapter();
         rv.setAdapter(stopDetailsAdapter);
         rv.setEmptyView(emptyTv);
         rv.setProgress(progressBar);
@@ -64,4 +65,9 @@ public class StopDetailsView extends LinearLayout implements StopDetailsScreen {
     public void displayStops(List<StopPoint> stopPoints) {
         stopDetailsAdapter.setItems(stopPoints);
     }
+
+    public void selectLocationStop(LatLng latLng) {
+        stopDetailsAdapter.select(latLng);
+    }
+
 }
