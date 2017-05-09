@@ -30,9 +30,6 @@ public class ChallengeApp extends Application implements HasDispatchingActivityI
         instance = this;
         component = DaggerAppComponent.builder().app(this).build();
         component.inject(this);
-
-        //TODO: move this to a debug build Application object
-        Stetho.initializeWithDefaults(this);
     }
 
     @Override

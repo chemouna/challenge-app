@@ -18,7 +18,7 @@ public class StopDetailsPresenter {
         this.api = api;
     }
 
-    public void bind(StopDetailsScreen screen, CompleteStopPoint completeStopPoint) {
+    void bind(StopDetailsScreen screen, CompleteStopPoint completeStopPoint) {
         this.screen = screen;
         this.completeStopPoint = completeStopPoint;
         List<Line> lines = completeStopPoint.stopPoint().lines();
@@ -26,6 +26,6 @@ public class StopDetailsPresenter {
         final Line line = lines.get(0);
         api.lineStops(line.id())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(response -> screen.displayStops(response));
+            .subscribe(screen::displayStops);
     }
 }

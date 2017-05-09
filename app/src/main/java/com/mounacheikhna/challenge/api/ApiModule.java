@@ -9,7 +9,9 @@ import com.mounacheikhna.challenge.BuildConfig;
 import dagger.Module;
 import dagger.Provides;
 import io.reactivex.schedulers.Schedulers;
+import java.util.List;
 import javax.inject.Singleton;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.internal.platform.Platform;
 import retrofit2.Retrofit;
@@ -30,19 +32,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
     @Provides
     @Singleton
-    static OkHttpClient provideOkhttpClient() {
-        return new OkHttpClient().newBuilder()
-            //TODO: add only on debug mode
-            .addInterceptor(new LoggingInterceptor.Builder()
-                .loggable(BuildConfig.DEBUG)
-                .setLevel(Level.BASIC)
-                .log(Platform.INFO)
-                .request("Request")
-                .response("Response")
-                .addHeader("version", BuildConfig.VERSION_NAME)
-                .build())
-            .addNetworkInterceptor(new StethoInterceptor())
-            .build();
+    static OkHttpClient.Builder provideOkhttpClientBuilder() {
+        return new OkHttpClient().newBuilder();
+    }
+
+    @Provides
+    @Singleton
+    public OkHttpClient provideApiClient(OkHttpClient.Builder builder) {
+        return builder.build();
     }
 
     @Provides

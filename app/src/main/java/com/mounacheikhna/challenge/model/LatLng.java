@@ -23,7 +23,7 @@ import com.google.auto.value.AutoValue;
 
         Builder longitude(double longitude);
 
-        Builder descrobe
+        Builder describe
         LatLng build();
     }
     */
