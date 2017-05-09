@@ -1,6 +1,7 @@
 package com.mounacheikhna.challenge.api;
 
-import com.mounacheikhna.challenge.model.Departure;
+import com.mounacheikhna.challenge.model.Arrival;
+import com.mounacheikhna.challenge.model.StopPoint;
 import com.mounacheikhna.challenge.model.StopPointResponse;
 import io.reactivex.Observable;
 import java.util.List;
@@ -15,5 +16,10 @@ public interface TflApi {
         @Query("lon") double longitude);
 
     @GET("/StopPoint/{stopPointId}/Arrivals")
-    Observable<List<Departure>> departures(@Path("stopPointId") String stopPointId);
+    Observable<List<Arrival>> arrivals(@Path("stopPointId") String stopPointId);
+
+    @GET("/Line/{lineId}/stoppoints")
+    Observable<List<StopPoint>> lineStops(@Path("lineId") String lineId);
+
 }
+

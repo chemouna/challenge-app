@@ -1,7 +1,6 @@
 package com.mounacheikhna.challenge.ui.main.stops;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,7 +15,6 @@ import butterknife.ButterKnife;
 import com.mounacheikhna.challenge.R;
 import com.mounacheikhna.challenge.data.PermissionManager;
 import com.mounacheikhna.challenge.model.CompleteStopPoint;
-import com.mounacheikhna.challenge.model.Departure;
 import com.mounacheikhna.challenge.model.StopPoint;
 import com.mounacheikhna.challenge.ui.recyclerview.ClickItemTouchListener;
 import com.mounacheikhna.challenge.ui.recyclerview.RecyclerViewWithEmptyProgress;
@@ -28,7 +26,7 @@ public class StopsView extends LinearLayout implements StopsScreen {
 
     @BindView(R.id.rv) RecyclerViewWithEmptyProgress stopsRv;
     @BindView(R.id.progress) ProgressBar progressBar;
-    @BindView(R.id.no_stops_tv) TextView noStopsTv;
+    @BindView(R.id.empty_tv) TextView noStopsTv;
 
     private StopsPresenter presenter;
     private StopsAdapter stopsAdapter;
@@ -106,13 +104,18 @@ public class StopsView extends LinearLayout implements StopsScreen {
 
     }
 
-    /*public void displayStopPoints(List<StopPoint> stopPoints) {
+    public void displayStopPoints(List<StopPoint> stopPoints) {
         stopsAdapter.setItems(stopPoints);
-    }*/
+    }
 
     @Override
     public void displayStopPoint(CompleteStopPoint result) {
         stopsAdapter.addItem(result);
+    }
+
+    @Override
+    public void clearList() {
+        stopsAdapter.clear();
     }
 
     @Override

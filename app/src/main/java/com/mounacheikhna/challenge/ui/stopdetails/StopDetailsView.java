@@ -2,17 +2,33 @@ package com.mounacheikhna.challenge.ui.stopdetails;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.mounacheikhna.challenge.R;
 import com.mounacheikhna.challenge.model.CompleteStopPoint;
+import com.mounacheikhna.challenge.model.Line;
+import com.mounacheikhna.challenge.model.StopPoint;
+import com.mounacheikhna.challenge.ui.main.stops.StopsAdapter;
+import com.mounacheikhna.challenge.ui.recyclerview.ClickItemTouchListener;
+import com.mounacheikhna.challenge.ui.recyclerview.RecyclerViewWithEmptyProgress;
+import java.util.List;
 
-public class StopDetailsView extends LinearLayout {
+public class StopDetailsView extends LinearLayout implements StopDetailsScreen {
+
+    @BindView(R.id.rv) RecyclerViewWithEmptyProgress rv;
+    @BindView(R.id.empty_tv) TextView emptyTv;
+    @BindView(R.id.progress) ProgressBar progressBar;
 
     @Nullable private CompleteStopPoint completeStopPoint;
+    private StopDetailsAdapter stopDetailsAdapter;
 
     public StopDetailsView(Context context) {
         this(context, null);
@@ -26,10 +42,26 @@ public class StopDetailsView extends LinearLayout {
         super(context, attrs, defStyleAttr);
         final View view = LayoutInflater.from(context).inflate(R.layout.stop_details_view, this, true);
         ButterKnife.bind(this, view);
+
+        setupDetailsRv();
     }
 
-    public void bind(CompleteStopPoint completeStopPoint) {
-        this.completeStopPoint = completeStopPoint;
+    private void setupDetailsRv() {
+        rv.setLayoutManager(new LinearLayoutManager(getContext()));
+        stopDetailsAdapter = new StopDetailsAdapter();
+        rv.setAdapter(stopDetailsAdapter);
+        rv.setEmptyView(emptyTv);
+        rv.setProgress(progressBar);
 
+    }
+
+    public void bind(StopDetailsPresenter presenter, CompleteStopPoint completeStopPoint) {
+        this.completeStopPoint = completeStopPoint;
+        presenter.bind(this, completeStopPoint);
+    }
+
+    @Override
+    public void displayStops(List<StopPoint> stopPoints) {
+        stopDetailsAdapter.setItems(stopPoints);
     }
 }

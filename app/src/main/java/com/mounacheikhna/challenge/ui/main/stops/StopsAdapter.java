@@ -9,7 +9,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.mounacheikhna.challenge.R;
 import com.mounacheikhna.challenge.model.CompleteStopPoint;
-import com.mounacheikhna.challenge.model.Departure;
+import com.mounacheikhna.challenge.model.Arrival;
+import com.mounacheikhna.challenge.model.StopPoint;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,20 +35,31 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopPointVie
         return stopPoints.size();
     }
 
-    void setItems(final List<CompleteStopPoint> stopPoints) {
-
-
+    /*void setItems(final List<CompleteStopPoint> stopPoints) {
         this.stopPoints = stopPoints;
+        notifyDataSetChanged();
+    }*/
+
+    public void setItems(final List<StopPoint> stopPoints) {
+        this.stopPoints.clear();
+        for (StopPoint stopPoint : stopPoints) {
+            this.stopPoints.add(CompleteStopPoint.create(stopPoint, new ArrayList<>()));
+        }
         notifyDataSetChanged();
     }
 
-    public void addItem(CompleteStopPoint result) {
+    void addItem(CompleteStopPoint result) {
         this.stopPoints.add(result);
         notifyDataSetChanged();
     }
 
-    public CompleteStopPoint getItem(int position) {
+    CompleteStopPoint getItem(int position) {
         return this.stopPoints.get(position);
+    }
+
+    void clear() {
+        this.stopPoints.clear();
+        notifyDataSetChanged();
     }
 
     static class StopPointViewHolder extends RecyclerView.ViewHolder {
@@ -69,8 +81,8 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopPointVie
             this.completeStopPoint = item;
             stopNameTv.setText(item.stopPoint().commonName());
             StringBuilder formattedDepartures = new StringBuilder();
-            for (Departure departure : item.departures()) {
-                formattedDepartures.append(departure.timeToStation()).append(" ");
+            for (Arrival arrival : item.departures()) {
+                formattedDepartures.append(arrival.timeToStation()).append(" ");
             }
             departuresTv.setText(formattedDepartures.toString());
         }

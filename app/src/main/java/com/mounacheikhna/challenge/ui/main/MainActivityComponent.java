@@ -8,21 +8,17 @@ import dagger.android.AndroidInjector;
 
 @ScopeSingleton(MainActivityComponent.class)
 @Subcomponent(modules = { MainActivityComponent.MainModule.class })
-public interface MainActivityComponent  extends AndroidInjector<MainActivity> {
+public interface MainActivityComponent extends AndroidInjector<MainActivity> {
 
-    @Subcomponent.Builder
-    public abstract class Builder extends AndroidInjector.Builder<MainActivity> {
+    @Subcomponent.Builder public abstract class Builder
+        extends AndroidInjector.Builder<MainActivity> {
     }
 
-    @Module
-    public class MainModule {
-
+    @Module public class MainModule {
         @ScopeSingleton(MainActivityComponent.class)
         @Provides
         PermissionRequester providePermissionRequester(MainActivity activity) {
             return new PermissionRequester(activity);
         }
     }
-
-
 }

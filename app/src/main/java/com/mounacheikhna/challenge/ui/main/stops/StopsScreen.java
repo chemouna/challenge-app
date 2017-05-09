@@ -1,7 +1,6 @@
 package com.mounacheikhna.challenge.ui.main.stops;
 
 import com.mounacheikhna.challenge.model.CompleteStopPoint;
-import com.mounacheikhna.challenge.model.Departure;
 import com.mounacheikhna.challenge.model.StopPoint;
 import io.reactivex.Observable;
 import java.util.List;
@@ -19,7 +18,10 @@ public interface StopsScreen {
 
     void showNoStopsView(boolean b);
 
-    //void displayStopPoints(List<StopPoint> stopPoints);
+    void displayStopPoints(List<StopPoint> stopPoints);
 
     void displayStopPoint(CompleteStopPoint result);
+
+    void clearList();
+
 }

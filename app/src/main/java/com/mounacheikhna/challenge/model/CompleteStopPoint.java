@@ -8,10 +8,10 @@ import java.util.List;
 public abstract class CompleteStopPoint implements Parcelable {
 
     public abstract StopPoint stopPoint();
-    public abstract List<Departure> departures();
+    public abstract List<Arrival> departures();
 
-    public static CompleteStopPoint create(StopPoint stopPoint, List<Departure> departures) {
-        return new AutoValue_CompleteStopPoint(stopPoint, departures);
+    public static CompleteStopPoint create(StopPoint stopPoint, List<Arrival> arrivals) {
+        return new AutoValue_CompleteStopPoint(stopPoint, arrivals);
     }
 
 }

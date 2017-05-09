@@ -9,9 +9,10 @@ import java.util.List;
 @AutoValue public abstract class StopPoint implements Parcelable {
 
     public static StopPoint create(String id, String naptanId, double lat, double lon,
-        String commonName, double distance, List<StopProperty> additionalProperties) {
+        String commonName, double distance, List<StopProperty> additionalProperties,
+        List<Line> lines) {
         return new AutoValue_StopPoint(id, naptanId, lat, lon, commonName, distance,
-            additionalProperties);
+            additionalProperties, lines);
     }
 
     public abstract String id();
@@ -27,6 +28,8 @@ import java.util.List;
     public abstract double distance();
 
     public abstract List<StopProperty> additionalProperties();
+
+    public abstract List<Line> lines();
 
     public static TypeAdapter<StopPoint> typeAdapter(Gson gson) {
         return new AutoValue_StopPoint.GsonTypeAdapter(gson);

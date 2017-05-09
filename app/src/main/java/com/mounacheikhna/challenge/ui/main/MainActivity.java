@@ -1,16 +1,20 @@
 package com.mounacheikhna.challenge.ui.main;
 
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.mounacheikhna.challenge.R;
+import com.mounacheikhna.challenge.annotation.ScopeSingleton;
 import com.mounacheikhna.challenge.data.PermissionManager;
 import com.mounacheikhna.challenge.ui.main.stops.StopsPresenter;
 import com.mounacheikhna.challenge.ui.main.stops.StopsView;
+import dagger.Module;
+import dagger.Provides;
+import dagger.Subcomponent;
 import dagger.android.AndroidInjection;
+import dagger.android.AndroidInjector;
 import javax.inject.Inject;
 
 public class MainActivity extends AppCompatActivity {
@@ -26,13 +30,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        setTitle(R.string.nearby_tube_stations);
 
         stopsView.bind(stopsPresenter);
     }
 
     @Override
-    public void onRequestPermissionsResult(final int requestCode, @NonNull final String[] permissions,
-        @NonNull final int[] grantResults) {
+    public void onRequestPermissionsResult(final int requestCode,
+        @NonNull final String[] permissions, @NonNull final int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         this.permissionManager.requestPermissionsResult(permissions, grantResults);
     }
