@@ -98,7 +98,6 @@ public class StopsView extends LinearLayout implements StopsScreen {
 
     @Override
     public void showLoadingView(boolean b) {
-
     }
 
     @Override

@@ -11,6 +11,17 @@
         android:id="@+id/stops_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"/>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/closest_indicator"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:lottie_fileName="location_pin.json"
+        app:lottie_loop="true"
+        app:lottie_autoPlay="true"
+        android:layout_centerVertical="true"
         />
+
 
 </android.support.constraint.ConstraintLayout>

@@ -86,11 +86,11 @@ public class StopsPresenter {
     }
 
     private void fetchStopPoints(StopsScreen screen, LatLng latLng) {
-        screen.showLoadingView(true);
+        //screen.showLoadingView(true);
         tflApi.stopPoint(latLng.latitude(), latLng.longitude())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(response -> {
-                screen.showLoadingView(false);
+                //screen.showLoadingView(false);
                 screen.displayStopPoints(response.stopPoints());
             }, screen::displayError);
     }

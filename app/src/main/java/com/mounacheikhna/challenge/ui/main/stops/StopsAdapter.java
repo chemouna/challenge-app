@@ -1,5 +1,9 @@
 package com.mounacheikhna.challenge.ui.main.stops;
 
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import com.airbnb.lottie.LottieAnimationView;
 import com.mounacheikhna.challenge.R;
 import com.mounacheikhna.challenge.helpers.LocationHelper;
 import com.mounacheikhna.challenge.model.Arrival;
@@ -96,7 +101,7 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopPointVie
     static class StopPointViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.stop_name_tv) TextView stopNameTv;
         @BindView(R.id.departures_tv) TextView departuresTv;
-        @BindView(R.id.closest_indicator) ImageView closestIndicator;
+        @BindView(R.id.closest_indicator) LottieAnimationView closestIndicator;
 
         private CompleteStopPoint completeStopPoint;
 
@@ -118,6 +123,12 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopPointVie
             }
             departuresTv.setText(formattedDepartures.toString());
             closestIndicator.setVisibility(closeToLocation ? View.VISIBLE : View.GONE);
+            if(closeToLocation) {
+                final PorterDuffColorFilter
+                    colorFilter = new PorterDuffColorFilter(Color.RED, PorterDuff.Mode.LIGHTEN);
+                closestIndicator.addColorFilter(colorFilter);
+            }
+
         }
 
         CompleteStopPoint getCompleteStopPoint() {
