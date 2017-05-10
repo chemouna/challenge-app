@@ -16,6 +16,7 @@ import com.mounacheikhna.challenge.model.LatLng;
 import com.mounacheikhna.challenge.model.StopPoint;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,11 +44,6 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopPointVie
         return stopPoints.size();
     }
 
-    /*void setItems(final List<CompleteStopPoint> stopPoints) {
-        this.stopPoints = stopPoints;
-        notifyDataSetChanged();
-    }*/
-
     public void setItems(final List<StopPoint> stopPoints) {
         this.stopPoints.clear();
         for (StopPoint stopPoint : stopPoints) {
@@ -71,7 +67,7 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopPointVie
     }
 
     public void select(LatLng latLng) {
-        //TODO: fix issue here of using Double instead of double
+        // TODO: this entire logic should instead be in the presenter and be done by it
         Map<Double, StopPoint> distances = new HashMap<>(this.stopPoints.size());
         for (int i = 0; i < this.stopPoints.size(); i++) {
             final StopPoint stopPoint = this.stopPoints.get(i).stopPoint();
@@ -81,6 +77,19 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopPointVie
         }
         final Double minDistance = Collections.min(distances.keySet());
         this.closestStopPoint = distances.get(minDistance);
+
+        //TODO: sort by closest
+        Collections.sort(stopPoints, (o1, o2) -> {
+            final double distanceStop1 =
+                LocationHelper.distance(latLng.latitude(), latLng.longitude(),
+                    o1.stopPoint().lat(), o1.stopPoint().lon());
+            final double distanceStop2 =
+                LocationHelper.distance(latLng.latitude(), latLng.longitude(),
+                    o2.stopPoint().lat(), o2.stopPoint().lon());
+            if (distanceStop1 == distanceStop2) return 0;
+            return distanceStop1 < distanceStop2 ? -1 : 1;
+        });
+
         notifyDataSetChanged();
     }
 

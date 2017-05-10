@@ -5,15 +5,10 @@ import com.mounacheikhna.challenge.api.TflApi;
 import com.mounacheikhna.challenge.data.GoogleApiClientProvider;
 import com.mounacheikhna.challenge.data.LocationRequester;
 import com.mounacheikhna.challenge.data.PermissionManager;
-import com.mounacheikhna.challenge.model.CompleteStopPoint;
 import com.mounacheikhna.challenge.model.LatLng;
-import com.mounacheikhna.challenge.model.StopPointResponse;
 import com.mounacheikhna.challenge.ui.main.PermissionRequester;
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.schedulers.Schedulers;
-import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
 public class StopsPresenter {
@@ -97,7 +92,7 @@ public class StopsPresenter {
             .subscribe(response -> {
                 screen.showLoadingView(false);
                 screen.displayStopPoints(response.stopPoints());
-            });
+            }, screen::displayError);
     }
 
     private boolean isInLondon(@NonNull final LatLng latLng) {

@@ -5,9 +5,12 @@ import android.support.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
+import javax.annotation.concurrent.Immutable;
 
+@Immutable
 @AutoValue
 public abstract class Arrival implements Parcelable {
+
   public abstract String lineId();
   public abstract String lineName();
   public abstract String platformName();

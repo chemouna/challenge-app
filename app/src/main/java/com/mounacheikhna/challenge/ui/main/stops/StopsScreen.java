@@ -24,4 +24,6 @@ public interface StopsScreen {
 
     void clearList();
 
+    void displayError(Throwable throwable);
+
 }

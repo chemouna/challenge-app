@@ -2,6 +2,7 @@ package com.mounacheikhna.challenge.ui.main.stops;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -12,6 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import com.facebook.stetho.inspector.elements.StyleRuleNameAccumulator;
 import com.mounacheikhna.challenge.R;
 import com.mounacheikhna.challenge.data.PermissionManager;
 import com.mounacheikhna.challenge.model.CompleteStopPoint;
@@ -116,6 +118,12 @@ public class StopsView extends LinearLayout implements StopsScreen {
     @Override
     public void clearList() {
         stopsAdapter.clear();
+    }
+
+    @Override
+    public void displayError(Throwable throwable) {
+        //TODO: handle the specific case of each error (network and other)
+        Snackbar.make(stopsRv, R.string.error_fetch_stops, Snackbar.LENGTH_LONG).show();
     }
 
     @Override

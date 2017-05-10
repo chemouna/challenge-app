@@ -11,6 +11,9 @@ public class DebugChallengeApp extends ChallengeApp {
 
         Stetho.initializeWithDefaults(this);
         enableStrictMode();
+
+        //LeakCanary.install(this);
+
     }
 
     private void enableStrictMode() {
