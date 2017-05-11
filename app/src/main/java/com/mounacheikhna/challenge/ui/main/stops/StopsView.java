@@ -111,6 +111,13 @@ public class StopsView extends LinearLayout implements StopsScreen {
     }
 
     @Override
+    public void onLocationDenied() {
+        Snackbar.make(stopsRv, R.string.location_not_enabled, Snackbar.LENGTH_LONG)
+            .setAction(R.string.enable_location, v -> presenter.requestLocationPermission())
+            .show();
+    }
+
+    @Override
     protected void onDetachedFromWindow() {
         presenter.unbind();
         super.onDetachedFromWindow();

@@ -1,6 +1,8 @@
 package com.mounacheikhna.challenge.ui.main.stops;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
-import org.joda.time.Period;
 
 public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopPointViewHolder> {
 
@@ -113,40 +114,30 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopPointVie
 
         void bind(final CompleteStopPoint item, boolean closeToLocation) {
             stopNameTv.setText(item.stopPoint().commonName());
-            /*StringBuilder formattedDepartures = new StringBuilder();
-            for (Arrival arrival : item.arrivals()) {
-                formattedDepartures.append(arrival.timeToStation()).append(" ");
+            final StringBuilder content = new StringBuilder("in ");
+            for (int i = 0; i < item.arrivals().size() && i < 3; i++) {
+                final Arrival arrival = item.arrivals().get(i);
+                final DateTime dateTime = DateTime.parse(arrival.expectedArrival());
+                String dt = formattedDurationFromNow(dateTime);
+                if (!TextUtils.isEmpty(content) && i > 0) {
+                    content.append(", ");
+                }
+                content.append(dt);
             }
-            arrivalsTv.setText(formattedDepartures.toString());*/
-            if (!item.arrivals().isEmpty()) {
-                final Arrival arrival = item.arrivals().get(0);
-                final String timeDifferenceWithNow =
-                    getTimeDifferenceWithNow(arrival.timeToStation());
-                //arrival.timeToStation();
-                arrivalsTv.setText(timeDifferenceWithNow);
-            }
+            content.append(" min");
+            arrivalsTv.setText(content.toString());
             closestIndicator.setVisibility(closeToLocation ? View.VISIBLE : View.GONE);
 
             //TODO: this is probably made better in terms of time to get there
             distanceToTv.setText(new DecimalFormat("##").format(item.stopPoint().distance()));
         }
+    }
 
-        //TODO: use Clock and put this in a place where it can be tested
-        String getTimeDifferenceWithNow(long time) {
-            DateTime dateTime = new DateTime(time);
-
-            Duration duration = new Duration(dateTime, DateTime.now());
-            Period period = duration.toPeriod();
-
-            //TODO: handle case where difference is days and hours
-            StringBuilder timeStrBuilder = new StringBuilder();
-
-            if (duration.getStandardHours() > 0) {
-                timeStrBuilder.append(period.getHours()).append("h");
-            }
-            timeStrBuilder.append(new DecimalFormat("##").format(duration.getStandardMinutes()))
-                .append("min");
-            return timeStrBuilder.toString();
-        }
+    //TODO: use Clock and put this in a place where it can be tested
+    @NonNull
+    private static String formattedDurationFromNow(DateTime dateTime) {
+        Duration duration = new Duration(DateTime.now(), dateTime);
+        return new StringBuilder().append(
+            new DecimalFormat("##").format(duration.getStandardMinutes())).toString();
     }
 }

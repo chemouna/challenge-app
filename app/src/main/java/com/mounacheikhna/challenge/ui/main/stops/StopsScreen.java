@@ -18,4 +18,5 @@ public interface StopsScreen {
 
     void clearStops();
 
+    void onLocationDenied();
 }
