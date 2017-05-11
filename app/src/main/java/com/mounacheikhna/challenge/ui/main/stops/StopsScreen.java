@@ -10,20 +10,12 @@ public interface StopsScreen {
 
     boolean hasLocationPermission();
 
-    Observable<Object> stopPointSelected();
-
-    void displayStopDetails(Object o);
-
-    void showLoadingView(boolean b);
-
-    void showNoStopsView(boolean b);
-
     void displayStopPoints(List<StopPoint> stopPoints);
 
-    void displayStopPoint(CompleteStopPoint result);
-
-    void clearList();
-
     void displayError(Throwable throwable);
+
+    void displayStopPoint(CompleteStopPoint stopPoint);
+
+    void clearStops();
 
 }

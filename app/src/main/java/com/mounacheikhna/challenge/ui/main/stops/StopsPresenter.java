@@ -1,14 +1,21 @@
 package com.mounacheikhna.challenge.ui.main.stops;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 import com.mounacheikhna.challenge.api.TflApi;
 import com.mounacheikhna.challenge.data.GoogleApiClientProvider;
 import com.mounacheikhna.challenge.data.LocationRequester;
 import com.mounacheikhna.challenge.data.PermissionManager;
+import com.mounacheikhna.challenge.model.CompleteStopPoint;
 import com.mounacheikhna.challenge.model.LatLng;
+import com.mounacheikhna.challenge.model.StopPointResponse;
 import com.mounacheikhna.challenge.ui.main.PermissionRequester;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
+import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
 public class StopsPresenter {
@@ -50,11 +57,40 @@ public class StopsPresenter {
         googleApiClientProvider.registerConnectionCallbacks(() -> {
             LatLng latLng = locationRequester.lastLocation(googleApiClientProvider);
 
-            if (latLng == null || !isInLondon(latLng)) {
+            if (latLng == null || !isInsideLondon(latLng)) {
                 latLng = LatLng.create(DEFAULT_LATITUDE, DEFAULT_LONGITUDE);
             }
 
-            fetchStopPoints(screen, latLng);
+            //fetchStopPoints(screen, latLng);
+
+            final Observable<StopPointResponse> stopPointObservable =
+                tflApi.stopPoint(latLng.latitude(), latLng.longitude())
+                    .share();
+
+            final Observable<CompleteStopPoint> stopPointsWithArrivalsObservable =
+                stopPointObservable.flatMap(
+                    response -> Observable.fromIterable(response.stopPoints())
+                        .flatMap(stopPoint -> {
+                            Log.d("TEST",
+                                "call to arrivals endpoint for stop point " + stopPoint);
+                            return tflApi.arrivals(stopPoint.id())
+                                .map(departures -> CompleteStopPoint.create(stopPoint, departures));
+                        }));
+
+            Observable.interval(0, 30, TimeUnit.SECONDS, Schedulers.io())
+                //.startWith(0L)
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(aLong -> {
+                    Log.d("TEST", "accept: Refresh emit -> clear adapter");
+                    screen.clearStops();
+                })
+                .flatMap(l -> stopPointsWithArrivalsObservable)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    Log.d("TEST",
+                        "resp: called with stoppoint : " + response.stopPoint());
+                    screen.displayStopPoint(CompleteStopPoint.create(response.stopPoint(), new ArrayList<>()));
+                }, throwable -> Log.d("TEST", "Error : " + throwable));
 
             /*final Observable<StopPointResponse> stopPointObservable =
                 tflApi.stopPoint(latLng.latitude(), latLng.longitude()).share();
@@ -95,7 +131,7 @@ public class StopsPresenter {
             }, screen::displayError);
     }
 
-    private boolean isInLondon(@NonNull final LatLng latLng) {
+    private boolean isInsideLondon(@NonNull final LatLng latLng) {
         return (latLng.latitude() > 51.288923
             && latLng.latitude() < 51.706130
             && latLng.longitude() > -0.524597

@@ -3,22 +3,19 @@ package com.mounacheikhna.challenge.ui.stopdetails;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import com.airbnb.lottie.LottieAnimationView;
 import com.mounacheikhna.challenge.R;
 import com.mounacheikhna.challenge.model.CompleteStopPoint;
 import com.mounacheikhna.challenge.model.LatLng;
-import com.mounacheikhna.challenge.model.Line;
 import com.mounacheikhna.challenge.model.StopPoint;
 import com.mounacheikhna.challenge.ui.main.stops.StopsAdapter;
-import com.mounacheikhna.challenge.ui.recyclerview.ClickItemTouchListener;
 import com.mounacheikhna.challenge.ui.recyclerview.RecyclerViewWithEmptyProgress;
 import java.util.List;
 
@@ -26,7 +23,7 @@ public class StopDetailsView extends LinearLayout implements StopDetailsScreen {
 
     @BindView(R.id.rv) RecyclerViewWithEmptyProgress rv;
     @BindView(R.id.empty_tv) TextView emptyTv;
-    @BindView(R.id.progress) ProgressBar progressBar;
+    @BindView(R.id.progress) LottieAnimationView progressView;
 
     @Nullable private CompleteStopPoint completeStopPoint;
     private StopsAdapter stopDetailsAdapter;
@@ -52,7 +49,7 @@ public class StopDetailsView extends LinearLayout implements StopDetailsScreen {
         stopDetailsAdapter = new StopsAdapter();
         rv.setAdapter(stopDetailsAdapter);
         rv.setEmptyView(emptyTv);
-        rv.setProgress(progressBar);
+        rv.setProgress(progressView);
 
     }
 

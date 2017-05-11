@@ -1,14 +1,12 @@
 package com.mounacheikhna.challenge.ui.main.stops;
 
 import android.graphics.Color;
-import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,7 +19,6 @@ import com.mounacheikhna.challenge.model.LatLng;
 import com.mounacheikhna.challenge.model.StopPoint;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -86,11 +83,11 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopPointVie
         //TODO: sort by closest
         Collections.sort(stopPoints, (o1, o2) -> {
             final double distanceStop1 =
-                LocationHelper.distance(latLng.latitude(), latLng.longitude(),
-                    o1.stopPoint().lat(), o1.stopPoint().lon());
+                LocationHelper.distance(latLng.latitude(), latLng.longitude(), o1.stopPoint().lat(),
+                    o1.stopPoint().lon());
             final double distanceStop2 =
-                LocationHelper.distance(latLng.latitude(), latLng.longitude(),
-                    o2.stopPoint().lat(), o2.stopPoint().lon());
+                LocationHelper.distance(latLng.latitude(), latLng.longitude(), o2.stopPoint().lat(),
+                    o2.stopPoint().lon());
             if (distanceStop1 == distanceStop2) return 0;
             return distanceStop1 < distanceStop2 ? -1 : 1;
         });
@@ -103,8 +100,6 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopPointVie
         @BindView(R.id.departures_tv) TextView departuresTv;
         @BindView(R.id.closest_indicator) LottieAnimationView closestIndicator;
 
-        private CompleteStopPoint completeStopPoint;
-
         StopPointViewHolder(final View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -115,7 +110,6 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopPointVie
         }
 
         void bind(final CompleteStopPoint item, boolean closeToLocation) {
-            this.completeStopPoint = item;
             stopNameTv.setText(item.stopPoint().commonName());
             StringBuilder formattedDepartures = new StringBuilder();
             for (Arrival arrival : item.departures()) {
@@ -123,16 +117,11 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopPointVie
             }
             departuresTv.setText(formattedDepartures.toString());
             closestIndicator.setVisibility(closeToLocation ? View.VISIBLE : View.GONE);
-            if(closeToLocation) {
-                final PorterDuffColorFilter
-                    colorFilter = new PorterDuffColorFilter(Color.RED, PorterDuff.Mode.LIGHTEN);
+            if (closeToLocation) {
+                final PorterDuffColorFilter colorFilter =
+                    new PorterDuffColorFilter(Color.RED, PorterDuff.Mode.LIGHTEN);
                 closestIndicator.addColorFilter(colorFilter);
             }
-
-        }
-
-        CompleteStopPoint getCompleteStopPoint() {
-            return completeStopPoint;
         }
     }
 }

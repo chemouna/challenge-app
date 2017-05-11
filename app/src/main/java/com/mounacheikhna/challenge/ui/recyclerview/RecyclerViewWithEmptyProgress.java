@@ -13,7 +13,7 @@ import android.widget.ProgressBar;
 public class RecyclerViewWithEmptyProgress extends RecyclerView {
     private View emptyView;
     private int numberHeaderFooter;
-    private ProgressBar progress;
+    private View progress;
     private AdapterDataObserver dataObserver = new AdapterDataObserver() {
         @Override
         public void onChanged() {
@@ -71,11 +71,7 @@ public class RecyclerViewWithEmptyProgress extends RecyclerView {
         }
     }
 
-    public ProgressBar getProgress() {
-        return progress;
-    }
-
-    public void setProgress(ProgressBar progress) {
+    public void setProgress(View progress) {
         this.progress = progress;
     }
 }

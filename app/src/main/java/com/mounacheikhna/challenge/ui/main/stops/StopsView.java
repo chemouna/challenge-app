@@ -9,11 +9,10 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.facebook.stetho.inspector.elements.StyleRuleNameAccumulator;
+import com.airbnb.lottie.LottieAnimationView;
 import com.mounacheikhna.challenge.R;
 import com.mounacheikhna.challenge.data.PermissionManager;
 import com.mounacheikhna.challenge.model.CompleteStopPoint;
@@ -27,7 +26,7 @@ import java.util.List;
 public class StopsView extends LinearLayout implements StopsScreen {
 
     @BindView(R.id.rv) RecyclerViewWithEmptyProgress stopsRv;
-    @BindView(R.id.progress) ProgressBar progressBar;
+    @BindView(R.id.progress) LottieAnimationView progressView;
     @BindView(R.id.empty_tv) TextView noStopsTv;
 
     private StopsPresenter presenter;
@@ -59,7 +58,7 @@ public class StopsView extends LinearLayout implements StopsScreen {
         stopsAdapter = new StopsAdapter();
         stopsRv.setAdapter(stopsAdapter);
         stopsRv.setEmptyView(noStopsTv);
-        stopsRv.setProgress(progressBar);
+        stopsRv.setProgress(progressView);
 
         stopsRv.addOnItemTouchListener(new ClickItemTouchListener(stopsRv) {
             @Override
@@ -86,43 +85,24 @@ public class StopsView extends LinearLayout implements StopsScreen {
         return PermissionManager.hasLocation(getContext());
     }
 
-    @Override
-    public Observable<Object> stopPointSelected() {
-        return null;
-    }
-
-    @Override
-    public void displayStopDetails(Object o) {
-
-    }
-
-    @Override
-    public void showLoadingView(boolean b) {
-    }
-
-    @Override
-    public void showNoStopsView(boolean b) {
-
-    }
-
     public void displayStopPoints(List<StopPoint> stopPoints) {
         stopsAdapter.setItems(stopPoints);
-    }
-
-    @Override
-    public void displayStopPoint(CompleteStopPoint result) {
-        stopsAdapter.addItem(result);
-    }
-
-    @Override
-    public void clearList() {
-        stopsAdapter.clear();
     }
 
     @Override
     public void displayError(Throwable throwable) {
         //TODO: handle the specific case of each error (network and other)
         Snackbar.make(stopsRv, R.string.error_fetch_stops, Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void displayStopPoint(CompleteStopPoint stopPoint) {
+        stopsAdapter.addItem(stopPoint);
+    }
+
+    @Override
+    public void clearStops() {
+        stopsAdapter.clear();
     }
 
     @Override
