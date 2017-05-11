@@ -7,6 +7,7 @@ import com.facebook.stetho.Stetho;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasDispatchingActivityInjector;
 import javax.inject.Inject;
+import net.danlew.android.joda.JodaTimeAndroid;
 
 public class ChallengeApp extends Application implements HasDispatchingActivityInjector {
 
@@ -30,6 +31,7 @@ public class ChallengeApp extends Application implements HasDispatchingActivityI
         instance = this;
         component = DaggerAppComponent.builder().app(this).build();
         component.inject(this);
+        JodaTimeAndroid.init(this);
     }
 
     @Override

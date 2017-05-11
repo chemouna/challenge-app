@@ -61,8 +61,6 @@ public class StopsPresenter {
                 latLng = LatLng.create(DEFAULT_LATITUDE, DEFAULT_LONGITUDE);
             }
 
-            //fetchStopPoints(screen, latLng);
-
             final Observable<StopPointResponse> stopPointObservable =
                 tflApi.stopPoint(latLng.latitude(), latLng.longitude())
                     .share();
@@ -78,7 +76,6 @@ public class StopsPresenter {
                         }));
 
             Observable.interval(0, 30, TimeUnit.SECONDS, Schedulers.io())
-                //.startWith(0L)
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(aLong -> {
                     Log.d("TEST", "accept: Refresh emit -> clear adapter");
@@ -89,46 +86,11 @@ public class StopsPresenter {
                 .subscribe(response -> {
                     Log.d("TEST",
                         "resp: called with stoppoint : " + response.stopPoint());
-                    screen.displayStopPoint(CompleteStopPoint.create(response.stopPoint(), new ArrayList<>()));
+                    screen.displayStopPoint(response);
                 }, throwable -> Log.d("TEST", "Error : " + throwable));
 
-            /*final Observable<StopPointResponse> stopPointObservable =
-                tflApi.stopPoint(latLng.latitude(), latLng.longitude()).share();
-            compositeDisposable.add(
-                Observable.interval(0, 30, TimeUnit.SECONDS, Schedulers.io())
-                .startWith(0L)
-                .take(10)
-                .flatMap(l -> stopPointObservable)
-                .flatMap(response -> Observable.fromIterable(response.stopPoints())
-                    .flatMap(stopPoint -> tflApi.arrivals(stopPoint.id())
-                        .map(departures -> CompleteStopPoint.create(stopPoint, departures)))
-                    .startWith(result -> StopsFetchUiModel.refresh())
-                    .map(StopsFetchUiModel::success)
-                    .onErrorReturn(t -> StopsFetchUiModel.failure(t.getMessage()))
-                )
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(result -> {
-                    if(result.isRefresh()) {
-                        //screen.clearList();
-                    }
-                    else if(result.isSuccess()) {
-                        screen.showLoadingView(false);
-                        screen.displayStopPoint(result.getCompleteStopPoint());
-                    }
-                }, Throwable::printStackTrace));*/
         });
         googleApiClientProvider.connect();
-    }
-
-    private void fetchStopPoints(StopsScreen screen, LatLng latLng) {
-        //screen.showLoadingView(true);
-        tflApi.stopPoint(latLng.latitude(), latLng.longitude())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(response -> {
-                //screen.showLoadingView(false);
-                screen.displayStopPoints(response.stopPoints());
-            }, screen::displayError);
     }
 
     private boolean isInsideLondon(@NonNull final LatLng latLng) {

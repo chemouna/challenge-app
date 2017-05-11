@@ -3,4 +3,5 @@
   <string name="no_stops">No Stops</string>
   <string name="nearby_tube_stations">Nearby Tube Stations</string>
   <string name="error_fetch_stops">Error Fetching stops</string>
+  <string name="near">Near</string>
 </resources>

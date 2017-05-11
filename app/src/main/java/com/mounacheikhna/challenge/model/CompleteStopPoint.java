@@ -10,7 +10,7 @@ import javax.annotation.concurrent.Immutable;
 public abstract class CompleteStopPoint implements Parcelable {
 
     public abstract StopPoint stopPoint();
-    public abstract List<Arrival> departures();
+    public abstract List<Arrival> arrivals();
 
     public static CompleteStopPoint create(StopPoint stopPoint, List<Arrival> arrivals) {
         return new AutoValue_CompleteStopPoint(stopPoint, arrivals);

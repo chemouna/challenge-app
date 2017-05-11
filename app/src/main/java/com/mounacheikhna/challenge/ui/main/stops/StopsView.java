@@ -18,6 +18,7 @@ import com.mounacheikhna.challenge.data.PermissionManager;
 import com.mounacheikhna.challenge.model.CompleteStopPoint;
 import com.mounacheikhna.challenge.model.StopPoint;
 import com.mounacheikhna.challenge.ui.recyclerview.ClickItemTouchListener;
+import com.mounacheikhna.challenge.ui.recyclerview.DividerItemDecoration;
 import com.mounacheikhna.challenge.ui.recyclerview.RecyclerViewWithEmptyProgress;
 import com.mounacheikhna.challenge.ui.stopdetails.StopDetailsActivity;
 import io.reactivex.Observable;
@@ -59,6 +60,11 @@ public class StopsView extends LinearLayout implements StopsScreen {
         stopsRv.setAdapter(stopsAdapter);
         stopsRv.setEmptyView(noStopsTv);
         stopsRv.setProgress(progressView);
+
+        //TODO: maybe instead use support lib DividerItemDecoration
+        stopsRv.addItemDecoration(
+            new DividerItemDecoration(getContext(), LinearLayoutManager.HORIZONTAL,
+                10, false));
 
         stopsRv.addOnItemTouchListener(new ClickItemTouchListener(stopsRv) {
             @Override

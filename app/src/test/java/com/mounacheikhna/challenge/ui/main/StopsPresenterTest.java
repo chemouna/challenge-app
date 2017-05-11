@@ -12,6 +12,10 @@ import org.mockito.junit.MockitoRule;
 
 public class StopsPresenterTest {
 
+    /**
+     * TODO: add a test with time schedule of rx
+     */
+
     @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
 
     private StopsPresenter stopsPresenter;

@@ -1,8 +1,5 @@
 package com.mounacheikhna.challenge.ui.main.stops;
 
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,18 +7,20 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.airbnb.lottie.LottieAnimationView;
 import com.mounacheikhna.challenge.R;
 import com.mounacheikhna.challenge.helpers.LocationHelper;
 import com.mounacheikhna.challenge.model.Arrival;
 import com.mounacheikhna.challenge.model.CompleteStopPoint;
 import com.mounacheikhna.challenge.model.LatLng;
 import com.mounacheikhna.challenge.model.StopPoint;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
 
 public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopPointViewHolder> {
 
@@ -70,6 +69,8 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopPointVie
 
     public void select(LatLng latLng) {
         // TODO: this entire logic should instead be in the presenter and be done by it
+
+        //TODO: just use the distance value in model StopPoint
         Map<Double, StopPoint> distances = new HashMap<>(this.stopPoints.size());
         for (int i = 0; i < this.stopPoints.size(); i++) {
             final StopPoint stopPoint = this.stopPoints.get(i).stopPoint();
@@ -80,7 +81,6 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopPointVie
         final Double minDistance = Collections.min(distances.keySet());
         this.closestStopPoint = distances.get(minDistance);
 
-        //TODO: sort by closest
         Collections.sort(stopPoints, (o1, o2) -> {
             final double distanceStop1 =
                 LocationHelper.distance(latLng.latitude(), latLng.longitude(), o1.stopPoint().lat(),
@@ -97,8 +97,9 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopPointVie
 
     static class StopPointViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.stop_name_tv) TextView stopNameTv;
-        @BindView(R.id.departures_tv) TextView departuresTv;
-        @BindView(R.id.closest_indicator) LottieAnimationView closestIndicator;
+        @BindView(R.id.departures_tv) TextView arrivalsTv;
+        @BindView(R.id.closest_indicator) TextView closestIndicator;
+        @BindView(R.id.distance_to_tv) TextView distanceToTv;
 
         StopPointViewHolder(final View itemView) {
             super(itemView);
@@ -111,17 +112,31 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopPointVie
 
         void bind(final CompleteStopPoint item, boolean closeToLocation) {
             stopNameTv.setText(item.stopPoint().commonName());
-            StringBuilder formattedDepartures = new StringBuilder();
-            for (Arrival arrival : item.departures()) {
+            /*StringBuilder formattedDepartures = new StringBuilder();
+            for (Arrival arrival : item.arrivals()) {
                 formattedDepartures.append(arrival.timeToStation()).append(" ");
             }
-            departuresTv.setText(formattedDepartures.toString());
-            closestIndicator.setVisibility(closeToLocation ? View.VISIBLE : View.GONE);
-            if (closeToLocation) {
-                final PorterDuffColorFilter colorFilter =
-                    new PorterDuffColorFilter(Color.RED, PorterDuff.Mode.LIGHTEN);
-                closestIndicator.addColorFilter(colorFilter);
+            arrivalsTv.setText(formattedDepartures.toString());*/
+            if (!item.arrivals().isEmpty()) {
+                final Arrival arrival = item.arrivals().get(0);
+                final long timeDifferenceWithNow = arrival.timeToStation();
+                    //getTimeDifferenceWithNow(arrival.timeToStation());
+                arrivalsTv.setText(new DecimalFormat("##").format(timeDifferenceWithNow) + " min");
             }
+            closestIndicator.setVisibility(closeToLocation ? View.VISIBLE : View.GONE);
+
+            //TODO: this is probably made better in terms of time to get there
+            distanceToTv.setText(new DecimalFormat("##").format(item.stopPoint().distance()));
+        }
+
+        //TODO: use Clock and put this in a place where it can be tested
+        long getTimeDifferenceWithNow(long time) {
+            DateTime now = new DateTime();
+            DateTime dateTime = new DateTime(time);
+
+            Duration duration = new Duration(dateTime, now);
+            //TODO: handle case where difference is days and hours
+            return duration.getStandardMinutes();
         }
     }
 }
