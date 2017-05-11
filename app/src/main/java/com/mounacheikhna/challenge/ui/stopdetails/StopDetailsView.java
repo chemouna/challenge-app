@@ -38,9 +38,9 @@ public class StopDetailsView extends LinearLayout implements StopDetailsScreen {
 
     public StopDetailsView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        final View view = LayoutInflater.from(context).inflate(R.layout.stop_details_view, this, true);
+        final View view =
+            LayoutInflater.from(context).inflate(R.layout.stop_details_view, this, true);
         ButterKnife.bind(this, view);
-
         setupDetailsRv();
     }
 
@@ -50,7 +50,6 @@ public class StopDetailsView extends LinearLayout implements StopDetailsScreen {
         rv.setAdapter(stopDetailsAdapter);
         rv.setEmptyView(emptyTv);
         rv.setProgress(progressView);
-
     }
 
     public void bind(StopDetailsPresenter presenter, CompleteStopPoint completeStopPoint) {
@@ -66,5 +65,4 @@ public class StopDetailsView extends LinearLayout implements StopDetailsScreen {
     public void selectLocationStop(LatLng latLng) {
         stopDetailsAdapter.select(latLng);
     }
-
 }

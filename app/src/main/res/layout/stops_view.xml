@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/darker_gray">
+    android:background="@color/light_gray">
 
   <com.mounacheikhna.challenge.ui.recyclerview.RecyclerViewWithEmptyProgress
       android:id="@+id/rv"
@@ -26,6 +26,7 @@
       />
 
   <LinearLayout
+      android:id="@+id/empty_container"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_margin="@dimen/default_margin"

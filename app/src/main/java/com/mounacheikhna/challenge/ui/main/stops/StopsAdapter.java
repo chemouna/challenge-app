@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
+import org.joda.time.Period;
 
 public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopPointViewHolder> {
 
@@ -119,9 +120,10 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopPointVie
             arrivalsTv.setText(formattedDepartures.toString());*/
             if (!item.arrivals().isEmpty()) {
                 final Arrival arrival = item.arrivals().get(0);
-                final long timeDifferenceWithNow = arrival.timeToStation();
-                    //getTimeDifferenceWithNow(arrival.timeToStation());
-                arrivalsTv.setText(new DecimalFormat("##").format(timeDifferenceWithNow) + " min");
+                final String timeDifferenceWithNow =
+                    getTimeDifferenceWithNow(arrival.timeToStation());
+                //arrival.timeToStation();
+                arrivalsTv.setText(timeDifferenceWithNow);
             }
             closestIndicator.setVisibility(closeToLocation ? View.VISIBLE : View.GONE);
 
@@ -130,13 +132,21 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopPointVie
         }
 
         //TODO: use Clock and put this in a place where it can be tested
-        long getTimeDifferenceWithNow(long time) {
-            DateTime now = new DateTime();
+        String getTimeDifferenceWithNow(long time) {
             DateTime dateTime = new DateTime(time);
 
-            Duration duration = new Duration(dateTime, now);
+            Duration duration = new Duration(dateTime, DateTime.now());
+            Period period = duration.toPeriod();
+
             //TODO: handle case where difference is days and hours
-            return duration.getStandardMinutes();
+            StringBuilder timeStrBuilder = new StringBuilder();
+
+            if (duration.getStandardHours() > 0) {
+                timeStrBuilder.append(period.getHours()).append("h");
+            }
+            timeStrBuilder.append(new DecimalFormat("##").format(duration.getStandardMinutes()))
+                .append("min");
+            return timeStrBuilder.toString();
         }
     }
 }

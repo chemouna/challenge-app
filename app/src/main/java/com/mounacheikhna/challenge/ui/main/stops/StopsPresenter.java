@@ -6,15 +6,19 @@ import com.mounacheikhna.challenge.api.TflApi;
 import com.mounacheikhna.challenge.data.GoogleApiClientProvider;
 import com.mounacheikhna.challenge.data.LocationRequester;
 import com.mounacheikhna.challenge.data.PermissionManager;
+import com.mounacheikhna.challenge.model.Arrival;
 import com.mounacheikhna.challenge.model.CompleteStopPoint;
 import com.mounacheikhna.challenge.model.LatLng;
 import com.mounacheikhna.challenge.model.StopPointResponse;
 import com.mounacheikhna.challenge.ui.main.PermissionRequester;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
@@ -22,6 +26,7 @@ public class StopsPresenter {
 
     private static final double DEFAULT_LATITUDE = 51.5033;
     private static final double DEFAULT_LONGITUDE = -0.1195;
+    private static final int STOP_POINTS_RADIUS = 900;
 
     private final GoogleApiClientProvider googleApiClientProvider;
     private final LocationRequester locationRequester;
@@ -62,30 +67,23 @@ public class StopsPresenter {
             }
 
             final Observable<StopPointResponse> stopPointObservable =
-                tflApi.stopPoint(latLng.latitude(), latLng.longitude())
-                    .share();
+                tflApi.stopPoint(latLng.latitude(), latLng.longitude(), STOP_POINTS_RADIUS)
+                    .cache();
 
             final Observable<CompleteStopPoint> stopPointsWithArrivalsObservable =
                 stopPointObservable.flatMap(
                     response -> Observable.fromIterable(response.stopPoints())
-                        .flatMap(stopPoint -> {
-                            Log.d("TEST",
-                                "call to arrivals endpoint for stop point " + stopPoint);
-                            return tflApi.arrivals(stopPoint.id())
-                                .map(departures -> CompleteStopPoint.create(stopPoint, departures));
-                        }));
+                        .flatMap(stopPoint -> tflApi.arrivals(stopPoint.id()).
+                            .map(departures -> CompleteStopPoint.create(stopPoint, departures))));
 
             Observable.interval(0, 30, TimeUnit.SECONDS, Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(aLong -> {
-                    Log.d("TEST", "accept: Refresh emit -> clear adapter");
                     screen.clearStops();
                 })
                 .flatMap(l -> stopPointsWithArrivalsObservable)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
-                    Log.d("TEST",
-                        "resp: called with stoppoint : " + response.stopPoint());
                     screen.displayStopPoint(response);
                 }, throwable -> Log.d("TEST", "Error : " + throwable));
 

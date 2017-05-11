@@ -8,8 +8,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.airbnb.lottie.LottieAnimationView;
@@ -27,7 +27,7 @@ public class StopsView extends LinearLayout implements StopsScreen {
 
     @BindView(R.id.rv) RecyclerViewWithEmptyProgress stopsRv;
     @BindView(R.id.progress) LottieAnimationView progressView;
-    @BindView(R.id.empty_tv) TextView noStopsTv;
+    @BindView(R.id.empty_container) ViewGroup emptyContainer;
 
     private StopsPresenter presenter;
     private StopsAdapter stopsAdapter;
@@ -57,7 +57,7 @@ public class StopsView extends LinearLayout implements StopsScreen {
         stopsRv.setLayoutManager(new LinearLayoutManager(getContext()));
         stopsAdapter = new StopsAdapter();
         stopsRv.setAdapter(stopsAdapter);
-        stopsRv.setEmptyView(noStopsTv);
+        stopsRv.setEmptyView(emptyContainer);
         stopsRv.setProgress(progressView);
 
         //TODO: maybe instead use support lib DividerItemDecoration
