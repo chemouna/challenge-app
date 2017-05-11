@@ -21,7 +21,6 @@ import com.mounacheikhna.challenge.ui.recyclerview.ClickItemTouchListener;
 import com.mounacheikhna.challenge.ui.recyclerview.DividerItemDecoration;
 import com.mounacheikhna.challenge.ui.recyclerview.RecyclerViewWithEmptyProgress;
 import com.mounacheikhna.challenge.ui.stopdetails.StopDetailsActivity;
-import io.reactivex.Observable;
 import java.util.List;
 
 public class StopsView extends LinearLayout implements StopsScreen {

@@ -1,7 +1,8 @@
 <resources>
-    <string name="app_name">Challenge</string>
+  <string name="app_name">Challenge</string>
   <string name="no_stops">No Stops</string>
   <string name="nearby_tube_stations">Nearby Tube Stations</string>
   <string name="error_fetch_stops">Error Fetching stops</string>
   <string name="near">Near</string>
+  <string name="no_stops_found_near_your_location">No stops found near your location</string>
 </resources>

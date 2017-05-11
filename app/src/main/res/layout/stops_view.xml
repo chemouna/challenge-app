@@ -1,10 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/darker_gray">
 
-  <include layout="@layout/recyclerview_progress_empty"/>
+  <com.mounacheikhna.challenge.ui.recyclerview.RecyclerViewWithEmptyProgress
+      android:id="@+id/rv"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:padding="@dimen/default_margin"
+      tools:visibility="gone"/>
+
+  <com.airbnb.lottie.LottieAnimationView
+      android:id="@+id/progress"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      app:lottie_fileName="loading.json"
+      app:lottie_loop="true"
+      app:lottie_autoPlay="true"
+      android:layout_gravity="center"
+      tools:visibility="gone"
+      />
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_margin="@dimen/default_margin"
+      android:gravity="center"
+      android:orientation="vertical"
+      android:visibility="gone"
+      tools:visibility="visible"
+      >
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        app:lottie_fileName="location_pin.json"
+        app:lottie_loop="true"
+        app:lottie_autoPlay="true"
+        android:layout_centerVertical="true"
+        tools:src="@drawable/transport"
+        />
+
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/larger_margin_between_views"
+        android:gravity="center"
+        android:textColor="@color/light_gray"
+        tools:text="@string/no_stops_found_near_your_location"
+        style="@style/TextTitle"
+        />
+
+  </LinearLayout>
+
 
 </LinearLayout>

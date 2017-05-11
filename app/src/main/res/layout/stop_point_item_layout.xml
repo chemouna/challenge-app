@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp"
+    android:padding="@dimen/default_margin"
     >
 
   <RelativeLayout
@@ -13,7 +13,7 @@
       android:background="?android:attr/selectableItemBackground"
       android:gravity="center_vertical"
       android:orientation="horizontal"
-      android:padding="16dp"
+      android:padding="@dimen/default_margin"
       >
 
     <ImageView
@@ -21,8 +21,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginEnd="@dimen/default_margin_half"
+        android:layout_marginRight="@dimen/default_margin_half"
         android:src="@drawable/transport"
         android:tint="@android:color/black"
         />
@@ -45,7 +45,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
+        android:layout_marginLeft="@dimen/default_margin_half"
         android:layout_toRightOf="@id/closest_indicator"
         android:orientation="vertical"
         >
