@@ -74,7 +74,7 @@ public class StopsPresenter {
 
             Observable.interval(0, 30, TimeUnit.SECONDS, Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(aLong -> screen.clearStops())
+                .doOnNext(l -> screen.clearStops())
                 .flatMap(l -> stopPointsWithArrivalsObservable)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(screen::displayStopPoint,

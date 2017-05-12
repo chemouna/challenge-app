@@ -3,6 +3,7 @@ package com.mounacheikhna.challenge.ui.main.stops;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.airbnb.lottie.LottieAnimationView;
@@ -20,6 +22,7 @@ import com.mounacheikhna.challenge.model.StopPoint;
 import com.mounacheikhna.challenge.ui.recyclerview.ClickItemTouchListener;
 import com.mounacheikhna.challenge.ui.recyclerview.DividerItemDecoration;
 import com.mounacheikhna.challenge.ui.recyclerview.RecyclerViewWithEmptyProgress;
+import com.mounacheikhna.challenge.ui.recyclerview.SimpleListDividerDecorator;
 import com.mounacheikhna.challenge.ui.stopdetails.StopDetailsActivity;
 import java.util.List;
 
@@ -28,6 +31,7 @@ public class StopsView extends LinearLayout implements StopsScreen {
     @BindView(R.id.rv) RecyclerViewWithEmptyProgress stopsRv;
     @BindView(R.id.progress) LottieAnimationView progressView;
     @BindView(R.id.empty_container) ViewGroup emptyContainer;
+    @BindDimen(R.dimen.divider_padding_start) float dividerPaddingStart;
 
     private StopsPresenter presenter;
     private StopsAdapter stopsAdapter;
@@ -60,10 +64,8 @@ public class StopsView extends LinearLayout implements StopsScreen {
         stopsRv.setEmptyView(emptyContainer);
         stopsRv.setProgress(progressView);
 
-        //TODO: maybe instead use support lib DividerItemDecoration
-        stopsRv.addItemDecoration(
-            new DividerItemDecoration(getContext(), LinearLayoutManager.HORIZONTAL,
-                10, false));
+        stopsRv.addItemDecoration(new SimpleListDividerDecorator(
+            ContextCompat.getDrawable(getContext(), R.drawable.stops_divider), false));
 
         stopsRv.addOnItemTouchListener(new ClickItemTouchListener(stopsRv) {
             @Override
