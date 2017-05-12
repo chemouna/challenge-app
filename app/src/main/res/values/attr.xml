@@ -7,11 +7,5 @@
   </declare-styleable>
 
   <attr format="boolean|reference" name="selected"/>
-  <attr format="enum" name="listPosition">
-    <enum name="ordinary" value="0"/>
-    <enum name="first" value="1"/>
-    <enum name="last" value="2"/>
-  </attr>
-
 
 </resources>

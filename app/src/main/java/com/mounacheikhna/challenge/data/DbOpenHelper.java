@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
+import com.mounacheikhna.challenge.model.SavedStop;
 
 /**
  * Helper for creating and upgrading the database.
@@ -14,7 +15,7 @@ public class DbOpenHelper extends SQLiteOpenHelper {
     private static final int DB_VERSION = 1;
     private static final String APP_DB = "app.db";
 
-    public DbOpenHelper(Context context) {
+    DbOpenHelper(Context context) {
         super(context, APP_DB, null, DB_VERSION);
     }
 
@@ -22,8 +23,8 @@ public class DbOpenHelper extends SQLiteOpenHelper {
         recreateDb(getWritableDatabase());
     }
 
-    public void recreateDb(SQLiteDatabase db) {
-        //db.execSQL("DROP TABLE IF EXISTS " + User.TABLE);
+    private void recreateDb(SQLiteDatabase db) {
+        db.execSQL("DROP TABLE IF EXISTS " + SavedStop.TABLE_NAME);
         onCreate(db);
     }
 
@@ -38,7 +39,7 @@ public class DbOpenHelper extends SQLiteOpenHelper {
         if (Build.VERSION.SDK_INT < 16) {
             db.execSQL("PRAGMA foreign_keys = ON;");
         }
-        //db.execSQL(User.CREATE_USER);
+        db.execSQL(SavedStop.CREATE_TABLE);
     }
 
     @Override

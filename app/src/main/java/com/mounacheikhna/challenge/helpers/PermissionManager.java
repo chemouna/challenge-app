@@ -56,7 +56,7 @@ import javax.inject.Singleton;
         return this.denials;
     }
 
-    public Observable<Boolean> granted(String permission) {
+    private Observable<Boolean> granted(String permission) {
         if (checkPermission(this.context, permission)) {
             return Observable.just(Boolean.TRUE);
         }

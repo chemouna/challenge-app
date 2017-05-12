@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import com.mounacheikhna.challenge.annotation.ObserveOnScheduler;
 import com.mounacheikhna.challenge.api.TflApi;
+import com.mounacheikhna.challenge.data.SavedStopManager;
 import com.mounacheikhna.challenge.helpers.GoogleApiClientProvider;
 import com.mounacheikhna.challenge.helpers.LocationRequester;
 import com.mounacheikhna.challenge.helpers.PermissionManager;
@@ -12,7 +13,6 @@ import com.mounacheikhna.challenge.model.LatLng;
 import com.mounacheikhna.challenge.model.StopPoint;
 import com.mounacheikhna.challenge.model.StopPointResponse;
 import com.mounacheikhna.challenge.ui.main.PermissionRequester;
-import com.squareup.sqlbrite.BriteDatabase;
 import io.reactivex.Observable;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -33,19 +33,22 @@ public class StopsPresenter {
     private final PermissionRequester permissionRequester;
     private final PermissionManager permissionManager;
     private final Scheduler observeOnScheduler;
+    private final SavedStopManager savedStopManager;
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Inject
     public StopsPresenter(GoogleApiClientProvider googleApiClientProvider,
         LocationRequester locationRequester, TflApi tflApi, PermissionRequester permissionRequester,
-        PermissionManager permissionManager, @ObserveOnScheduler Scheduler observeOnScheduler) {
+        PermissionManager permissionManager, @ObserveOnScheduler Scheduler observeOnScheduler,
+        SavedStopManager savedStopManager) {
         this.googleApiClientProvider = googleApiClientProvider;
         this.locationRequester = locationRequester;
         this.tflApi = tflApi;
         this.permissionRequester = permissionRequester;
         this.permissionManager = permissionManager;
         this.observeOnScheduler = observeOnScheduler;
+        this.savedStopManager = savedStopManager;
     }
 
     void bind(StopsScreen screen) {
@@ -99,11 +102,11 @@ public class StopsPresenter {
         compositeDisposable.clear();
     }
 
-    public void requestLocationPermission() {
+    void requestLocationPermission() {
         permissionRequester.requestLocation();
     }
 
-    public void savePoint(StopPoint stopPoint) {
-
+    void savePoint(StopPoint stopPoint) {
+        savedStopManager.save(stopPoint);
     }
 }

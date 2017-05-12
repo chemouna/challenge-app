@@ -20,6 +20,7 @@ import com.mounacheikhna.challenge.model.CompleteStopPoint;
 import com.mounacheikhna.challenge.model.StopPoint;
 import com.mounacheikhna.challenge.ui.recyclerview.RecyclerViewWithEmptyProgress;
 import com.mounacheikhna.challenge.ui.recyclerview.SimpleListDividerDecorator;
+import io.reactivex.functions.Consumer;
 import java.util.List;
 import rx.functions.Action1;
 
@@ -64,21 +65,17 @@ public class StopsView extends LinearLayout implements StopsScreen {
         stopsRv.addItemDecoration(new SimpleListDividerDecorator(
             ContextCompat.getDrawable(getContext(), R.drawable.stops_divider), false));
 
-        stopsAdapter.stopPointSave.subscribe(presenter::savePoint);
+        stopsAdapter.stopPointSave.subscribe(stopPoint -> {
+            if (stopPoint != null) {
+                presenter.savePoint(stopPoint);
+                Snackbar.make(stopsRv, R.string.stop_point_saved, Snackbar.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override
     public boolean hasLocationPermission() {
         return PermissionManager.hasLocation(getContext());
-    }
-
-    public void displayStopPoints(List<StopPoint> stopPoints) {
-        stopsAdapter.setItems(stopPoints);
-    }
-
-    @Override
-    public void displayError(Throwable throwable) {
-        Snackbar.make(stopsRv, R.string.error_fetch_stops, Snackbar.LENGTH_LONG).show();
     }
 
     @Override

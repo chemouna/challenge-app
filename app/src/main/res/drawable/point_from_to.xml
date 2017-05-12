@@ -2,9 +2,9 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="oval">
     <size
-        android:height="@dimen/point_from_to_size"
-        android:width="@dimen/point_from_to_size"/>
+        android:height="@dimen/from_to_size"
+        android:width="@dimen/from_to_size"/>
     <stroke
         android:color="@color/stopLineColorDivider"
-        android:width="@dimen/point_from_to_stroke"/>
+        android:width="@dimen/from_to_stroke"/>
 </shape>

@@ -16,10 +16,6 @@ import rx.schedulers.Schedulers;
 
 public class StopsPresenterTest {
 
-    /**
-     * TODO: add a test with time schedule of rx
-     */
-
     @Rule public MockitoRule mockitoRule = MockitoJUnit.rule();
 
     private StopsPresenter stopsPresenter;
@@ -29,9 +25,12 @@ public class StopsPresenterTest {
     @Mock private TflApi tflApi;
     @Mock private PermissionRequester requester;
     @Mock private PermissionManager permissionManager;
+
     @Before
     public void setUp() throws Exception {
         stopsPresenter = new StopsPresenter(googleApiClientProvider, locationRequester, tflApi,
-            requester, permissionManager, AndroidSchedulers.mainThread()); //not sure of using mainThread instead of using another scheduler
+            requester, permissionManager, AndroidSchedulers.mainThread());
     }
+
+
 }

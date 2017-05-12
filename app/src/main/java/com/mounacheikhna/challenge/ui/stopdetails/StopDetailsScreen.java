@@ -4,7 +4,7 @@ import com.mounacheikhna.challenge.model.LatLng;
 import com.mounacheikhna.challenge.model.StopPoint;
 import java.util.List;
 
-public interface StopDetailsScreen {
+interface StopDetailsScreen {
 
     void displayStops(List<StopPoint> stopPoints);
 

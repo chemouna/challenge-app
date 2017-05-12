@@ -15,7 +15,7 @@
   <dimen name="space_4">4dp</dimen>
   <dimen name="space_56">56dp</dimen>
 
-  <dimen name="point_from_to_size">8dp</dimen>
-  <dimen name="point_from_to_stroke">4dp</dimen>
+  <dimen name="from_to_size">8dp</dimen>
+  <dimen name="from_to_stroke">4dp</dimen>
 
 </resources>

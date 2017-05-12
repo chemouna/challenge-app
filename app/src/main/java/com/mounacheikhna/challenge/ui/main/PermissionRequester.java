@@ -7,7 +7,7 @@ public class PermissionRequester {
 
     private final Activity activity;
 
-    public PermissionRequester(Activity activity) {
+    PermissionRequester(Activity activity) {
         this.activity = activity;
     }
 

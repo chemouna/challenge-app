@@ -11,7 +11,7 @@ CREATE TABLE SavedStop (
     lineName TEXT
 );
 
-insert_player:
+insert_saved_stop:
 INSERT INTO SavedStop (lat, lon, commonName, distance, lineId, lineName)
 VALUES (?, ?, ?, ?, ?, ?);
 

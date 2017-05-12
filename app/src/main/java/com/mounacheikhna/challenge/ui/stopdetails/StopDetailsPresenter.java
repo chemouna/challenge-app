@@ -13,11 +13,9 @@ import javax.inject.Inject;
 
 public class StopDetailsPresenter {
 
-    private CompleteStopPoint completeStopPoint;
     private final GoogleApiClientProvider googleApiClientProvider;
     private final TflApi api;
     private final LocationRequester locationRequester;
-    private StopDetailsScreen screen;
 
     @Inject
     public StopDetailsPresenter(GoogleApiClientProvider googleApiClientProvider, TflApi api,
@@ -28,11 +26,9 @@ public class StopDetailsPresenter {
     }
 
     void bind(StopDetailsScreen screen, CompleteStopPoint completeStopPoint) {
-        this.screen = screen;
-        this.completeStopPoint = completeStopPoint;
         googleApiClientProvider.registerConnectionCallbacks(() -> {
             LatLng latLng = locationRequester.lastLocation(googleApiClientProvider);
-            latLng = LatLng.create(51.5033, -0.1195); //this is temp -> check not in london first
+            latLng = LatLng.create(51.5033, -0.1195); //this is for testing only (to get a value close to a station)
             screen.selectLocationStop(latLng);
         });
         fetchLineStops(screen, completeStopPoint);
