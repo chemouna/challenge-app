@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -14,25 +13,23 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.mounacheikhna.challenge.R;
-import com.mounacheikhna.challenge.helpers.LocationHelper;
 import com.mounacheikhna.challenge.model.Arrival;
 import com.mounacheikhna.challenge.model.CompleteStopPoint;
-import com.mounacheikhna.challenge.model.LatLng;
 import com.mounacheikhna.challenge.model.StopPoint;
 import com.mounacheikhna.challenge.ui.stopdetails.StopDetailsActivity;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
+import rx.Observable;
+import rx.subjects.PublishSubject;
 
 public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopPointViewHolder> {
 
     private List<CompleteStopPoint> stopPoints = new ArrayList<>();
     private StopPoint closestStopPoint;
+    public final PublishSubject<StopPoint> stopPointSave = PublishSubject.create();
 
     @Override
     public StopPointViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
@@ -44,7 +41,8 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopPointVie
     @Override
     public void onBindViewHolder(final StopPointViewHolder holder, final int position) {
         final CompleteStopPoint item = stopPoints.get(position);
-        holder.bind(item, closestStopPoint != null && closestStopPoint.equals(item.stopPoint()));
+        holder.bind(item, closestStopPoint != null && closestStopPoint.equals(item.stopPoint()),
+            stopPointSave);
     }
 
     @Override
@@ -92,7 +90,8 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopPointVie
             return R.layout.stop_point_item_layout;
         }
 
-        void bind(final CompleteStopPoint item, boolean closeToLocation) {
+        void bind(final CompleteStopPoint item, boolean closeToLocation,
+            PublishSubject<StopPoint> stopPointSave) {
             stopNameTv.setText(item.stopPoint().commonName());
             final StringBuilder content = new StringBuilder("in ");
             for (int i = 0; i < item.arrivals().size() && i < 3; i++) {
@@ -119,14 +118,19 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopPointVie
             popupMenu.setOnMenuItemClickListener(item1 -> {
                 switch (item1.getItemId()) {
                     case R.id.save:
-                        //TODO: now you can save this
+                        stopPointSave.onNext(item.stopPoint());
                         break;
                 }
                 return false;
             });
 
-            stopInfoContainer.setOnClickListener(v -> StopDetailsActivity.start(itemView.getContext(), item));
+            stopInfoContainer.setOnClickListener(
+                v -> StopDetailsActivity.start(itemView.getContext(), item));
         }
+    }
+
+    Observable<StopPoint> onStopPoint() {
+        return stopPointSave;
     }
 
     //TODO: use Clock and put this in a place where it can be tested

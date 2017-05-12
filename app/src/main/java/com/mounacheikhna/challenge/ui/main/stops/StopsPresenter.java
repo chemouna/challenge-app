@@ -9,8 +9,10 @@ import com.mounacheikhna.challenge.helpers.LocationRequester;
 import com.mounacheikhna.challenge.helpers.PermissionManager;
 import com.mounacheikhna.challenge.model.CompleteStopPoint;
 import com.mounacheikhna.challenge.model.LatLng;
+import com.mounacheikhna.challenge.model.StopPoint;
 import com.mounacheikhna.challenge.model.StopPointResponse;
 import com.mounacheikhna.challenge.ui.main.PermissionRequester;
+import com.squareup.sqlbrite.BriteDatabase;
 import io.reactivex.Observable;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -99,5 +101,9 @@ public class StopsPresenter {
 
     public void requestLocationPermission() {
         permissionRequester.requestLocation();
+    }
+
+    public void savePoint(StopPoint stopPoint) {
+
     }
 }

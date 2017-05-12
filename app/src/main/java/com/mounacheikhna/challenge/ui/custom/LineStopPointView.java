@@ -19,11 +19,11 @@ public class LineStopPointView extends LinearLayout {
 
     protected boolean selected;
 
-    @BindView(R.id.location_item_top_line) View topLine;
-    @BindView(R.id.location_item_bottom_line) View bottomLine;
-    @BindView(R.id.location_item_ring) ImageView ring;
-    @BindView(R.id.location_item_title) TextView title;
-    @BindView(R.id.location_item_subtitle) TextView subtitle;
+    @BindView(R.id.stop_item_top_line) View topLine;
+    @BindView(R.id.stop_item_bottom_line) View bottomLine;
+    @BindView(R.id.stop_item_ring) ImageView ring;
+    @BindView(R.id.stop_item_title) TextView title;
+    @BindView(R.id.stop_item_subtitle) TextView subtitle;
 
     public LineStopPointView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);

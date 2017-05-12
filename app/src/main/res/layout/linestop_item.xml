@@ -15,7 +15,7 @@
         >
 
         <View
-            android:id="@+id/location_item_top_line"
+            android:id="@+id/stop_item_top_line"
             android:layout_width="3dp"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -23,14 +23,14 @@
             />
 
         <ImageView
-            android:id="@+id/location_item_ring"
+            android:id="@+id/stop_item_ring"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/stop_point"
             />
 
         <View
-            android:id="@+id/location_item_bottom_line"
+            android:id="@+id/stop_item_bottom_line"
             android:layout_width="3dp"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -48,19 +48,17 @@
         >
 
         <TextView
-            android:id="@+id/location_item_title"
+            android:id="@+id/stop_item_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="@style/Challenge.TextAppearance.Body1.Primary"
-            tools:text="~08:00 - Paris"
             />
 
         <TextView
-            android:id="@+id/location_item_subtitle"
+            android:id="@+id/stop_item_subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="@style/Challenge.TextAppearance.Body1.Secondary"
-            tools:text="Porte d'Italie"
             />
 
     </LinearLayout>
