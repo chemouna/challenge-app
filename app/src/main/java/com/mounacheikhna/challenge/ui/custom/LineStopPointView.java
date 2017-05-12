@@ -37,7 +37,7 @@ public class LineStopPointView extends LinearLayout {
     }
 
     public View inflate() {
-        return inflate(getContext(), R.layout.location_item, this);
+        return inflate(getContext(), R.layout.linestop_item, this);
     }
 
     public void init(AttributeSet attrs, int defStyleAttr) {

@@ -13,10 +13,7 @@ import com.mounacheikhna.challenge.model.StopPoint;
 import com.mounacheikhna.challenge.ui.custom.LineStopPointView;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 public class StopDetailsAdapter
     extends RecyclerView.Adapter<StopDetailsAdapter.StopDetailsViewHolder> {
@@ -48,27 +45,16 @@ public class StopDetailsAdapter
 
     void selectNear(LatLng latLng) {
         // TODO: this entire logic should instead be in the presenter and be done by it
-        //TODO: just use the distance value in model StopPoint
-        Map<Double, StopPoint> distances = new HashMap<>(this.stopPoints.size());
-        for (int i = 0; i < this.stopPoints.size(); i++) {
-            final StopPoint stopPoint = this.stopPoints.get(i);
-            distances.put(
-                LocationHelper.distance(latLng.latitude(), latLng.longitude(), stopPoint.lat(),
-                    stopPoint.lon()), stopPoint);
-        }
-        final Double minDistance = Collections.min(distances.keySet());
-        this.closestStopPoint = distances.get(minDistance);
-
         Collections.sort(stopPoints, (o1, o2) -> {
             final double distanceStop1 =
-                LocationHelper.distance(latLng.latitude(), latLng.longitude(), o1.lat(),
-                    o1.lon());
+                LocationHelper.distance(latLng.latitude(), latLng.longitude(), o1.lat(), o1.lon());
             final double distanceStop2 =
-                LocationHelper.distance(latLng.latitude(), latLng.longitude(), o2.lat(),
-                    o2 .lon());
+                LocationHelper.distance(latLng.latitude(), latLng.longitude(), o2.lat(), o2.lon());
             if (distanceStop1 == distanceStop2) return 0;
             return distanceStop1 < distanceStop2 ? -1 : 1;
         });
+
+        this.closestStopPoint = stopPoints.get(0);
 
         notifyDataSetChanged();
     }
@@ -87,10 +73,9 @@ public class StopDetailsAdapter
 
         void bind(StopPoint stopPoint, StopPoint nearestStopPoint) {
             stopView.setTitle(stopPoint.commonName());
-            if(nearestStopPoint != null && stopPoint.id().equals(nearestStopPoint.id())) {
+            if (nearestStopPoint != null && stopPoint.id().equals(nearestStopPoint.id())) {
                 stopView.selectedStopPoint(true);
-            }
-            else {
+            } else {
                 stopView.selectedStopPoint(false);
             }
         }
