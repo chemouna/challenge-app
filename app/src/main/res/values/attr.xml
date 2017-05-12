@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <declare-styleable name="LineStopPointView">
+    <attr name="selected"/>
+    <attr name="title"/>
+    <attr name="subtitle"/>
+  </declare-styleable>
+
+  <attr format="boolean|reference" name="selected"/>
+  <attr format="enum" name="listPosition">
+    <enum name="ordinary" value="0"/>
+    <enum name="first" value="1"/>
+    <enum name="last" value="2"/>
+  </attr>
+
+
+</resources>

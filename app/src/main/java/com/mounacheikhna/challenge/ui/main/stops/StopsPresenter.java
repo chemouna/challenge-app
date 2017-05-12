@@ -2,15 +2,17 @@ package com.mounacheikhna.challenge.ui.main.stops;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
+import com.mounacheikhna.challenge.annotation.ObserveOnScheduler;
 import com.mounacheikhna.challenge.api.TflApi;
-import com.mounacheikhna.challenge.data.GoogleApiClientProvider;
-import com.mounacheikhna.challenge.data.LocationRequester;
-import com.mounacheikhna.challenge.data.PermissionManager;
+import com.mounacheikhna.challenge.helpers.GoogleApiClientProvider;
+import com.mounacheikhna.challenge.helpers.LocationRequester;
+import com.mounacheikhna.challenge.helpers.PermissionManager;
 import com.mounacheikhna.challenge.model.CompleteStopPoint;
 import com.mounacheikhna.challenge.model.LatLng;
 import com.mounacheikhna.challenge.model.StopPointResponse;
 import com.mounacheikhna.challenge.ui.main.PermissionRequester;
 import io.reactivex.Observable;
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -28,18 +30,20 @@ public class StopsPresenter {
     private final TflApi tflApi;
     private final PermissionRequester permissionRequester;
     private final PermissionManager permissionManager;
+    private final Scheduler observeOnScheduler;
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Inject
     public StopsPresenter(GoogleApiClientProvider googleApiClientProvider,
         LocationRequester locationRequester, TflApi tflApi, PermissionRequester permissionRequester,
-        PermissionManager permissionManager) {
+        PermissionManager permissionManager, @ObserveOnScheduler Scheduler observeOnScheduler) {
         this.googleApiClientProvider = googleApiClientProvider;
         this.locationRequester = locationRequester;
         this.tflApi = tflApi;
         this.permissionRequester = permissionRequester;
         this.permissionManager = permissionManager;
+        this.observeOnScheduler = observeOnScheduler;
     }
 
     void bind(StopsScreen screen) {
@@ -48,9 +52,7 @@ public class StopsPresenter {
         } else {
             permissionManager.anyGanted(PermissionManager.REQUEST_LOCATION_PERMISSIONS)
                 .subscribe(granted -> getLocationAndUpdateStops(screen));
-            permissionManager.denials().subscribe(s -> {
-                screen.onLocationDenied();
-            });
+            permissionManager.denials().subscribe(s -> screen.onLocationDenied());
             permissionRequester.requestLocation();
         }
     }
@@ -73,7 +75,7 @@ public class StopsPresenter {
                             .map(arrivals -> CompleteStopPoint.create(stopPoint, arrivals))));
 
             Observable.interval(0, 30, TimeUnit.SECONDS, Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .observeOn(observeOnScheduler)
                 .doOnNext(l -> screen.clearStops())
                 .flatMap(l -> stopPointsWithArrivalsObservable)
                 .observeOn(AndroidSchedulers.mainThread())

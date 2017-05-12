@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,14 +15,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.airbnb.lottie.LottieAnimationView;
 import com.mounacheikhna.challenge.R;
-import com.mounacheikhna.challenge.data.PermissionManager;
+import com.mounacheikhna.challenge.helpers.PermissionManager;
 import com.mounacheikhna.challenge.model.CompleteStopPoint;
 import com.mounacheikhna.challenge.model.StopPoint;
-import com.mounacheikhna.challenge.ui.recyclerview.ClickItemTouchListener;
-import com.mounacheikhna.challenge.ui.recyclerview.DividerItemDecoration;
 import com.mounacheikhna.challenge.ui.recyclerview.RecyclerViewWithEmptyProgress;
 import com.mounacheikhna.challenge.ui.recyclerview.SimpleListDividerDecorator;
-import com.mounacheikhna.challenge.ui.stopdetails.StopDetailsActivity;
 import java.util.List;
 
 public class StopsView extends LinearLayout implements StopsScreen {
@@ -66,25 +62,6 @@ public class StopsView extends LinearLayout implements StopsScreen {
 
         stopsRv.addItemDecoration(new SimpleListDividerDecorator(
             ContextCompat.getDrawable(getContext(), R.drawable.stops_divider), false));
-
-        stopsRv.addOnItemTouchListener(new ClickItemTouchListener(stopsRv) {
-            @Override
-            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-            }
-
-            @Override
-            protected boolean performItemClick(RecyclerView parent, View view, int position,
-                long id) {
-                StopDetailsActivity.start(getContext(), stopsAdapter.getItem(position));
-                return true;
-            }
-
-            @Override
-            public boolean performItemLongClick(RecyclerView parent, View view, int position,
-                long id) {
-                return false;
-            }
-        });
     }
 
     @Override

@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.squareup.sqldelight'
 
 android {
   compileSdkVersion rootProject.ext.compileSdkVersion
@@ -34,6 +35,9 @@ android {
     targetCompatibility JavaVersion.VERSION_1_8
   }
 
+  packagingOptions {
+    exclude 'META-INF/rxjava.properties'
+  }
 }
 
 configurations.all {
@@ -43,7 +47,7 @@ configurations.all {
 dependencies {
   compile fileTree(dir: 'libs', include: ['*.jar'])
   compile "com.android.support:appcompat-v7:$supportVersion"
-  compile "com.android.support.constraint:constraint-layout:1.0.2"
+  compile "com.android.support.constraint:constraint-layout:$constraintLayoutVersion"
   compile "com.jakewharton:butterknife:$butterKnifeVersion"
   annotationProcessor "com.jakewharton:butterknife-compiler:$butterKnifeVersion"
 
@@ -75,7 +79,6 @@ dependencies {
   compile "com.android.support:recyclerview-v7:$supportVersion"
 
   compile "com.google.android.gms:play-services-location:$playServicesVersion"
-  compile "com.jakewharton.rxbinding2:rxbinding:2.0.0"
 
   compile("com.github.ihsanbal:LoggingInterceptor:+") {
     exclude group: 'org.json', module: 'json'
@@ -86,6 +89,9 @@ dependencies {
   compile "com.airbnb.android:lottie:$lottieVersion"
   compile "net.danlew:android.joda:$jodaVersion"
 
+  compile "com.squareup.sqlbrite:sqlbrite:$sqlBrite"
+  compile "com.github.akarnokd:rxjava2-interop:$rxjavaInterop"
+
   debugCompile "com.squareup.leakcanary:leakcanary-android:$leakCanaryVersion"
 
   /********* Debug only dependencies *******/
@@ -95,7 +101,7 @@ dependencies {
   testCompile "junit:junit:$jUnitVersion"
   testCompile "org.mockito:mockito-core:$mockitoVersion"
 
-  androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+  androidTestCompile("com.android.support.test.espresso:espresso-core:$espressoVersion", {
     exclude group: 'com.android.support', module: 'support-annotations'
   })
 }

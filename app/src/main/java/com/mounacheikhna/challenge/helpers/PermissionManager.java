@@ -1,4 +1,4 @@
-package com.mounacheikhna.challenge.data;
+package com.mounacheikhna.challenge.helpers;
 
 import android.Manifest;
 import android.app.Activity;

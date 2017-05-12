@@ -9,5 +9,14 @@
 
   <dimen name="text_size_title">20sp</dimen>
   <dimen name="divider_padding_start">8dp</dimen>
+  <dimen name="overflow_menu_size">40dp</dimen>
+
+  <dimen name="space_2">2dp</dimen>
+  <dimen name="space_4">4dp</dimen>
+  <dimen name="space_56">56dp</dimen>
+
+  <dimen name="point_from_to_size">4dp</dimen>
+  <dimen name="point_from_to_stroke">2dp</dimen>
+
 
 </resources>

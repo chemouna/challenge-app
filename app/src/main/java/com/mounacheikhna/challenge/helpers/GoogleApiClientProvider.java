@@ -1,4 +1,4 @@
-package com.mounacheikhna.challenge.data;
+package com.mounacheikhna.challenge.helpers;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

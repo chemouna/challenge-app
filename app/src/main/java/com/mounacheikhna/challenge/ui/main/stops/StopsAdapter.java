@@ -4,8 +4,12 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -15,6 +19,7 @@ import com.mounacheikhna.challenge.model.Arrival;
 import com.mounacheikhna.challenge.model.CompleteStopPoint;
 import com.mounacheikhna.challenge.model.LatLng;
 import com.mounacheikhna.challenge.model.StopPoint;
+import com.mounacheikhna.challenge.ui.stopdetails.StopDetailsActivity;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -69,39 +74,14 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopPointVie
         notifyDataSetChanged();
     }
 
-    public void select(LatLng latLng) {
-        // TODO: this entire logic should instead be in the presenter and be done by it
-
-        //TODO: just use the distance value in model StopPoint
-        Map<Double, StopPoint> distances = new HashMap<>(this.stopPoints.size());
-        for (int i = 0; i < this.stopPoints.size(); i++) {
-            final StopPoint stopPoint = this.stopPoints.get(i).stopPoint();
-            distances.put(
-                LocationHelper.distance(latLng.latitude(), latLng.longitude(), stopPoint.lat(),
-                    stopPoint.lon()), stopPoint);
-        }
-        final Double minDistance = Collections.min(distances.keySet());
-        this.closestStopPoint = distances.get(minDistance);
-
-        Collections.sort(stopPoints, (o1, o2) -> {
-            final double distanceStop1 =
-                LocationHelper.distance(latLng.latitude(), latLng.longitude(), o1.stopPoint().lat(),
-                    o1.stopPoint().lon());
-            final double distanceStop2 =
-                LocationHelper.distance(latLng.latitude(), latLng.longitude(), o2.stopPoint().lat(),
-                    o2.stopPoint().lon());
-            if (distanceStop1 == distanceStop2) return 0;
-            return distanceStop1 < distanceStop2 ? -1 : 1;
-        });
-
-        notifyDataSetChanged();
-    }
-
+    //TODO put this in its own class and make the item a custom view class
     static class StopPointViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.stop_name_tv) TextView stopNameTv;
         @BindView(R.id.departures_tv) TextView arrivalsTv;
         @BindView(R.id.closest_indicator) TextView closestIndicator;
         @BindView(R.id.distance_to_tv) TextView distanceToTv;
+        @BindView(R.id.overflow_menu) ImageButton overflowImageButton;
+        @BindView(R.id.stop_info_container) View stopInfoContainer;
 
         StopPointViewHolder(final View itemView) {
             super(itemView);
@@ -130,6 +110,22 @@ public class StopsAdapter extends RecyclerView.Adapter<StopsAdapter.StopPointVie
 
             //TODO: this is probably made better in terms of time to get there
             distanceToTv.setText(new DecimalFormat("##").format(item.stopPoint().distance()));
+
+            PopupMenu popupMenu = new PopupMenu(itemView.getContext(), overflowImageButton);
+            MenuInflater inflater = popupMenu.getMenuInflater();
+            inflater.inflate(R.menu.stop_item_menu, popupMenu.getMenu());
+
+            overflowImageButton.setOnClickListener(v -> popupMenu.show());
+            popupMenu.setOnMenuItemClickListener(item1 -> {
+                switch (item1.getItemId()) {
+                    case R.id.save:
+                        //TODO: now you can save this
+                        break;
+                }
+                return false;
+            });
+
+            stopInfoContainer.setOnClickListener(v -> StopDetailsActivity.start(itemView.getContext(), item));
         }
     }
 

@@ -22,4 +22,10 @@
     <color name="dark_gray">#413D35</color>
     <color name="light_gray">#727272</color>
 
+    <color name="menu_more_options">#ADAFAF</color>
+    <color name="colorDivider">#DDDDDD</color>
+
+    <color name="gray5">#727272</color>
+    <color name="gray4">#ADAFAF</color>
+
 </resources>

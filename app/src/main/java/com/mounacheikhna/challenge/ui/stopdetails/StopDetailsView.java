@@ -15,7 +15,6 @@ import com.mounacheikhna.challenge.R;
 import com.mounacheikhna.challenge.model.CompleteStopPoint;
 import com.mounacheikhna.challenge.model.LatLng;
 import com.mounacheikhna.challenge.model.StopPoint;
-import com.mounacheikhna.challenge.ui.main.stops.StopsAdapter;
 import com.mounacheikhna.challenge.ui.recyclerview.RecyclerViewWithEmptyProgress;
 import java.util.List;
 
@@ -25,8 +24,7 @@ public class StopDetailsView extends LinearLayout implements StopDetailsScreen {
     @BindView(R.id.empty_tv) TextView emptyTv;
     @BindView(R.id.progress) LottieAnimationView progressView;
 
-    @Nullable private CompleteStopPoint completeStopPoint;
-    private StopsAdapter stopDetailsAdapter;
+    private StopDetailsAdapter stopDetailsAdapter;
 
     public StopDetailsView(Context context) {
         this(context, null);
@@ -46,14 +44,13 @@ public class StopDetailsView extends LinearLayout implements StopDetailsScreen {
 
     private void setupDetailsRv() {
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
-        stopDetailsAdapter = new StopsAdapter();
+        stopDetailsAdapter = new StopDetailsAdapter();
         rv.setAdapter(stopDetailsAdapter);
         rv.setEmptyView(emptyTv);
         rv.setProgress(progressView);
     }
 
     public void bind(StopDetailsPresenter presenter, CompleteStopPoint completeStopPoint) {
-        this.completeStopPoint = completeStopPoint;
         presenter.bind(this, completeStopPoint);
     }
 
@@ -62,7 +59,8 @@ public class StopDetailsView extends LinearLayout implements StopDetailsScreen {
         stopDetailsAdapter.setItems(stopPoints);
     }
 
+    @Override
     public void selectLocationStop(LatLng latLng) {
-        stopDetailsAdapter.select(latLng);
+        stopDetailsAdapter.selectNear(latLng);
     }
 }

@@ -16,7 +16,6 @@ import javax.inject.Singleton;
     @Component.Builder interface Builder {
         @BindsInstance
         Builder app(ChallengeApp app);
-
         AppComponent build();
     }
 }

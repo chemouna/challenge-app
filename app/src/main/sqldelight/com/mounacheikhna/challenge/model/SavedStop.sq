@@ -1,0 +1,20 @@
+
+import java.util.Calendar;
+
+CREATE TABLE SavedStop (
+    _id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    lat INTEGER NOT NULL,
+    lon INTEGER NOT NULL,
+    commonName TEXT NOT NULL,
+    distance INTEGER,
+    lineId TEXT,
+    lineName TEXT
+);
+
+insert_player:
+INSERT INTO SavedStop (lat, lon, commonName, distance, lineId, lineName)
+VALUES (?, ?, ?, ?, ?, ?);
+
+select_all:
+SELECT *
+FROM SavedStop;

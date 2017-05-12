@@ -1,14 +1,13 @@
 package com.mounacheikhna.challenge.ui.stopdetails;
 
+import android.util.Log;
 import com.mounacheikhna.challenge.api.TflApi;
-import com.mounacheikhna.challenge.data.GoogleApiClientProvider;
-import com.mounacheikhna.challenge.data.LocationRequester;
+import com.mounacheikhna.challenge.helpers.GoogleApiClientProvider;
+import com.mounacheikhna.challenge.helpers.LocationRequester;
 import com.mounacheikhna.challenge.model.CompleteStopPoint;
 import com.mounacheikhna.challenge.model.LatLng;
 import com.mounacheikhna.challenge.model.Line;
-import com.mounacheikhna.challenge.model.StopPoint;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -48,6 +47,6 @@ public class StopDetailsPresenter {
             .subscribe(stopPoints -> {
                 screen.displayStops(stopPoints);
                 googleApiClientProvider.connect();
-            });
+            }, throwable -> Log.d("TEST", "accept: throwable : "+ throwable));
     }
 }

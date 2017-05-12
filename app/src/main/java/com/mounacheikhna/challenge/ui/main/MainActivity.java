@@ -6,15 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.mounacheikhna.challenge.R;
-import com.mounacheikhna.challenge.annotation.ScopeSingleton;
-import com.mounacheikhna.challenge.data.PermissionManager;
+import com.mounacheikhna.challenge.helpers.PermissionManager;
 import com.mounacheikhna.challenge.ui.main.stops.StopsPresenter;
 import com.mounacheikhna.challenge.ui.main.stops.StopsView;
-import dagger.Module;
-import dagger.Provides;
-import dagger.Subcomponent;
 import dagger.android.AndroidInjection;
-import dagger.android.AndroidInjector;
 import javax.inject.Inject;
 
 public class MainActivity extends AppCompatActivity {
